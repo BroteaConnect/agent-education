@@ -1,0 +1,1 @@
+🚀 Brotea: We develop AI agents for Web3 education and mobile app development. We create an open-source ecosystem that simplifies onboarding and enables component reuse. 🌱 Like an education platform powered by agents that help anyone create mobile components.
