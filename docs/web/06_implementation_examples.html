@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>06_implementation_examples.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="brotea-implementation-examples">Brotea: Implementation Examples</h1>
+<p>This document provides production-ready code examples for key components of the Brotea platform, following best practices and design patterns. The examples demonstrate how to implement the architecture and flows defined in previous steps.</p>
+<h2 id="technical-stack-selection">Technical Stack Selection</h2>
+<p>Based on the requirements and architecture defined in previous steps, we recommend the following technology stack:</p>
+<h3 id="backend">Backend</h3>
+<ul>
+<li><strong>Language</strong>: TypeScript/Node.js</li>
+<li><strong>API Framework</strong>: NestJS (provides structured architecture with dependency injection)</li>
+<li><strong>Database</strong>: PostgreSQL (primary data store) with MongoDB (for educational content)</li>
+<li><strong>ORM</strong>: TypeORM (for PostgreSQL) and Mongoose (for MongoDB)</li>
+<li><strong>Authentication</strong>: JWT with Passport.js</li>
+<li><strong>API Documentation</strong>: Swagger/OpenAPI</li>
+<li><strong>Testing</strong>: Jest, Supertest</li>
+<li><strong>Message Queue</strong>: RabbitMQ (for event-driven architecture)</li>
+</ul>
+<h3 id="frontend">Frontend</h3>
+<ul>
+<li><strong>Framework</strong>: React with Next.js (for SSR capabilities)</li>
+<li><strong>State Management</strong>: Redux Toolkit with RTK Query</li>
+<li><strong>UI Components</strong>: Material-UI with custom theming</li>
+<li><strong>Form Handling</strong>: React Hook Form with Yup validation</li>
+<li><strong>Testing</strong>: Jest, React Testing Library</li>
+<li><strong>Code Quality</strong>: ESLint, Prettier</li>
+</ul>
+<h3 id="ai-services">AI Services</h3>
+<ul>
+<li><strong>Framework</strong>: TensorFlow.js (for client-side inference)</li>
+<li><strong>Model Hosting</strong>: TensorFlow Serving (for complex models)</li>
+<li><strong>NLP Processing</strong>: Hugging Face Transformers</li>
+<li><strong>Vector Database</strong>: Pinecone (for semantic search)</li>
+</ul>
+<h3 id="devops">DevOps</h3>
+<ul>
+<li><strong>CI/CD</strong>: GitHub Actions</li>
+<li><strong>Containerization</strong>: Docker, Kubernetes</li>
+<li><strong>Monitoring</strong>: Prometheus, Grafana</li>
+<li><strong>Logging</strong>: ELK Stack (Elasticsearch, Logstash, Kibana)</li>
+</ul>
+<h2 id="backend-implementation-examples">Backend Implementation Examples</h2>
+<h3 id="1-domain-models">1. Domain Models</h3>
+<p>First, let's implement some of the core domain models using TypeScript with proper typing and validation.</p>
+<h4 id="user-entity">User Entity</h4>
+<pre class="hljs"><code><div><span class="hljs-comment">// src/domain/entities/user.entity.ts</span>
+<span class="hljs-keyword">import</span> { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne } <span class="hljs-keyword">from</span> <span class="hljs-string">'typeorm'</span>;
+<span class="hljs-keyword">import</span> { Exclude } <span class="hljs-keyword">from</span> <span class="hljs-string">'class-transformer'</span>;
+<span class="hljs-keyword">import</span> { Component } <span class="hljs-keyword">from</span> <span class="hljs-string">'./component.entity'</span>;
+<span class="hljs-keyword">import</span> { Progress } <span class="hljs-keyword">from</span> <span class="hljs-string">'./progress.entity'</span>;
+<span class="hljs-keyword">import</span> { ProfileInfo } <span class="hljs-keyword">from</span> <span class="hljs-string">'./profile-info.entity'</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">enum</span> UserRole {
+  USER = <span class="hljs-string">'user'</span>,
+  EDUCATOR = <span class="hljs-string">'educator'</span>,
+  ADMIN = <span class="hljs-string">'admin'</span>,
+}
+
+<span class="hljs-meta">@Entity</span>(<span class="hljs-string">'users'</span>)
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> User {
+  <span class="hljs-meta">@PrimaryGeneratedColumn</span>(<span class="hljs-string">'uuid'</span>)
+  id: <span class="hljs-built_in">string</span>;
+
+  <span class="hljs-meta">@Column</span>({ unique: <span class="hljs-literal">true</span> })
+  email: <span class="hljs-built_in">string</span>;
+
+  <span class="hljs-meta">@Column</span>()
+  displayName: <span class="hljs-built_in">string</span>;
+
+  <span class="hljs-meta">@Exclude</span>()
+  <span class="hljs-meta">@Column</span>()
+  passwordHash: <span class="hljs-built_in">string</span>;
+
+  <span class="hljs-meta">@Column</span>({
+    <span class="hljs-keyword">type</span>: <span class="hljs-string">'enum'</span>,
+    <span class="hljs-keyword">enum</span>: UserRole,
+    <span class="hljs-keyword">default</span>: UserRole.USER,
+  })
+  role: UserRole;
+
+  <span class="hljs-meta">@Column</span>({ <span class="hljs-keyword">default</span>: <span class="hljs-literal">true</span> })
+  isActive: <span class="hljs-built_in">boolean</span>;
+
+  <span class="hljs-meta">@Column</span>({ <span class="hljs-keyword">type</span>: <span class="hljs-string">'timestamp'</span>, <span class="hljs-keyword">default</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-string">'CURRENT_TIMESTAMP'</span> })
+  createdAt: <span class="hljs-built_in">Date</span>;
+
+  <span class="hljs-meta">@Column</span>({ <span class="hljs-keyword">type</span>: <span class="hljs-string">'timestamp'</span>, <span class="hljs-keyword">default</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-string">'CURRENT_TIMESTAMP'</span>, onUpdate: <span class="hljs-string">'CURRENT_TIMESTAMP'</span> })
+  updatedAt: <span class="hljs-built_in">Date</span>;
+
+  <span class="hljs-meta">@OneToOne</span>(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> ProfileInfo, <span class="hljs-function">(<span class="hljs-params">profile</span>) =&gt;</span> profile.user, { cascade: <span class="hljs-literal">true</span> })
+  profileInfo: ProfileInfo;
+
+  <span class="hljs-meta">@OneToMany</span>(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> Component, <span class="hljs-function">(<span class="hljs-params">component</span>) =&gt;</span> component.creator)
+  createdComponents: Component[];
+
+  <span class="hljs-meta">@OneToMany</span>(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> Progress, <span class="hljs-function">(<span class="hljs-params">progress</span>) =&gt;</span> progress.user)
+  learningProgress: Progress[];
+}
+</div></code></pre>
+<h4 id="learning-module-entity">Learning Module Entity</h4>
+<pre class="hljs"><code><div><span class="hljs-comment">// src/domain/entities/learning-module.entity.ts</span>
+<span class="hljs-keyword">import</span> { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany, JoinTable } <span class="hljs-keyword">from</span> <span class="hljs-string">'typeorm'</span>;
+<span class="hljs-keyword">import</span> { Topic } <span class="hljs-keyword">from</span> <span class="hljs-string">'./topic.entity'</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">enum</span> DifficultyLevel {
+  BEGINNER = <span class="hljs-string">'beginner'</span>,
+  INTERMEDIATE = <span class="hljs-string">'intermediate'</span>,
+  ADVANCED = <span class="hljs-string">'advanced'</span>,
+}
+
+<span class="hljs-meta">@Entity</span>(<span class="hljs-string">'learning_modules'</span>)
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> LearningModule {
+  <span class="hljs-meta">@PrimaryGeneratedColumn</span>(<span class="hljs-string">'uuid'</span>)
+  id: <span class="hljs-built_in">string</span>;
+
+  <span class="hljs-meta">@Column</span>()
+  title: <span class="hljs-built_in">string</span>;
+
+  <span class="hljs-meta">@Column</span>(<span class="hljs-string">'text'</span>)
+  description: <span class="hljs-built_in">string</span>;
+
+  <span class="hljs-meta">@Column</span>({
+    <span class="hljs-keyword">type</span>: <span class="hljs-string">'enum'</span>,
+    <span class="hljs-keyword">enum</span>: DifficultyLevel,
+    <span class="hljs-keyword">default</span>: DifficultyLevel.BEGINNER,
+  })
+  difficulty: DifficultyLevel;
+
+  <span class="hljs-meta">@Column</span>(<span class="hljs-string">'jsonb'</span>, { <span class="hljs-keyword">default</span>: {} })
+  metadata: Record&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">any</span>&gt;;
+
+  <span class="hljs-meta">@Column</span>({ <span class="hljs-keyword">type</span>: <span class="hljs-string">'timestamp'</span>, <span class="hljs-keyword">default</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-string">'CURRENT_TIMESTAMP'</span> })
+  createdAt: <span class="hljs-built_in">Date</span>;
+
+  <span class="hljs-meta">@Column</span>({ <span class="hljs-keyword">type</span>: <span class="hljs-string">'timestamp'</span>, <span class="hljs-keyword">default</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-string">'CURRENT_TIMESTAMP'</span>, onUpdate: <span class="hljs-string">'CURRENT_TIMESTAMP'</span> })
+  updatedAt: <span class="hljs-built_in">Date</span>;
+
+  <span class="hljs-meta">@OneToMany</span>(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> Topic, <span class="hljs-function">(<span class="hljs-params">topic</span>) =&gt;</span> topic.<span class="hljs-keyword">module</span>, { cascade: <span class="hljs-literal">true</span> })
+  topics: Topic[];
+
+  <span class="hljs-meta">@ManyToMany</span>(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> LearningModule)
+  <span class="hljs-meta">@JoinTable</span>({
+    name: <span class="hljs-string">'module_prerequisites'</span>,
+    joinColumn: { name: <span class="hljs-string">'module_id'</span>, referencedColumnName: <span class="hljs-string">'id'</span> },
+    inverseJoinColumn: { name: <span class="hljs-string">'prerequisite_id'</span>, referencedColumnName: <span class="hljs-string">'id'</span> },
+  })
+  prerequisites: LearningModule[];
+
+  <span class="hljs-keyword">public</span> calculateCompletionRate(userProgress: Map&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">any</span>&gt;): <span class="hljs-built_in">number</span> {
+    <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.topics || <span class="hljs-keyword">this</span>.topics.length === <span class="hljs-number">0</span>) {
+      <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+    }
+
+    <span class="hljs-keyword">let</span> completedTopics = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> topic of <span class="hljs-keyword">this</span>.topics) {
+      <span class="hljs-keyword">const</span> topicProgress = userProgress.get(topic.id);
+      <span class="hljs-keyword">if</span> (topicProgress &amp;&amp; topicProgress.completionStatus === <span class="hljs-string">'completed'</span>) {
+        completedTopics++;
+      }
+    }
+
+    <span class="hljs-keyword">return</span> (completedTopics / <span class="hljs-keyword">this</span>.topics.length) * <span class="hljs-number">100</span>;
+  }
+}
+</div></code></pre>
+<h4 id="component-entity">Component Entity</h4>
+<pre class="hljs"><code><div><span class="hljs-comment">// src/domain/entities/component.entity.ts</span>
+<span class="hljs-keyword">import</span> { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne, OneToMany, JoinColumn } <span class="hljs-keyword">from</span> <span class="hljs-string">'typeorm'</span>;
+<span class="hljs-keyword">import</span> { User } <span class="hljs-keyword">from</span> <span class="hljs-string">'./user.entity'</span>;
+<span class="hljs-keyword">import</span> { SourceCode } <span class="hljs-keyword">from</span> <span class="hljs-string">'./source-code.entity'</span>;
+<span class="hljs-keyword">import</span> { Dependency } <span class="hljs-keyword">from</span> <span class="hljs-string">'./dependency.entity'</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">enum</span> PlatformType {
+  IOS = <span class="hljs-string">'ios'</span>,
+  ANDROID = <span class="hljs-string">'android'</span>,
+  CROSS_PLATFORM = <span class="hljs-string">'cross-platform'</span>,
+  WEB = <span class="hljs-string">'web'</span>,
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">enum</span> FrameworkType {
+  REACT_NATIVE = <span class="hljs-string">'react-native'</span>,
+  FLUTTER = <span class="hljs-string">'flutter'</span>,
+  NATIVE_SCRIPT = <span class="hljs-string">'native-script'</span>,
+  SWIFT_UI = <span class="hljs-string">'swift-ui'</span>,
+  JETPACK_COMPOSE = <span class="hljs-string">'jetpack-compose'</span>,
+}
+
+<span class="hljs-meta">@Entity</span>(<span class="hljs-string">'components'</span>)
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> Component {
+  <span class="hljs-meta">@PrimaryGeneratedColumn</span>(<span class="hljs-string">'uuid'</span>)
+  id: <span class="hljs-built_in">string</span>;
+
+  <span class="hljs-meta">@Column</span>()
+  name: <span class="hljs-built_in">string</span>;
+
+  <span class="hljs-meta">@Column</span>(<span class="hljs-string">'text'</span>)
+  description: <span class="hljs-built_in">string</span>;
+
+  <span class="hljs-meta">@Column</span>()
+  version: <span class="hljs-built_in">string</span>;
+
+  <span class="hljs-meta">@Column</span>({
+    <span class="hljs-keyword">type</span>: <span class="hljs-string">'enum'</span>,
+    <span class="hljs-keyword">enum</span>: PlatformType,
+  })
+  platform: PlatformType;
+
+  <span class="hljs-meta">@Column</span>({
+    <span class="hljs-keyword">type</span>: <span class="hljs-string">'enum'</span>,
+    <span class="hljs-keyword">enum</span>: FrameworkType,
+    nullable: <span class="hljs-literal">true</span>,
+  })
+  framework: FrameworkType;
+
+  <span class="hljs-meta">@Column</span>(<span class="hljs-string">'jsonb'</span>, { <span class="hljs-keyword">default</span>: {} })
+  metadata: Record&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">any</span>&gt;;
+
+  <span class="hljs-meta">@Column</span>({ <span class="hljs-keyword">type</span>: <span class="hljs-string">'timestamp'</span>, <span class="hljs-keyword">default</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-string">'CURRENT_TIMESTAMP'</span> })
+  createdAt: <span class="hljs-built_in">Date</span>;
+
+  <span class="hljs-meta">@Column</span>({ <span class="hljs-keyword">type</span>: <span class="hljs-string">'timestamp'</span>, <span class="hljs-keyword">default</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-string">'CURRENT_TIMESTAMP'</span>, onUpdate: <span class="hljs-string">'CURRENT_TIMESTAMP'</span> })
+  updatedAt: <span class="hljs-built_in">Date</span>;
+
+  <span class="hljs-meta">@ManyToOne</span>(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> User, <span class="hljs-function">(<span class="hljs-params">user</span>) =&gt;</span> user.createdComponents)
+  <span class="hljs-meta">@JoinColumn</span>({ name: <span class="hljs-string">'creator_id'</span> })
+  creator: User;
+
+  <span class="hljs-meta">@OneToOne</span>(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> SourceCode, <span class="hljs-function">(<span class="hljs-params">sourceCode</span>) =&gt;</span> sourceCode.component, { cascade: <span class="hljs-literal">true</span> })
+  sourceCode: SourceCode;
+
+  <span class="hljs-meta">@OneToMany</span>(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> Dependency, <span class="hljs-function">(<span class="hljs-params">dependency</span>) =&gt;</span> dependency.component, { cascade: <span class="hljs-literal">true</span> })
+  dependencies: Dependency[];
+
+  <span class="hljs-meta">@Column</span>(<span class="hljs-string">'text'</span>, { array: <span class="hljs-literal">true</span>, <span class="hljs-keyword">default</span>: [] })
+  tags: <span class="hljs-built_in">string</span>[];
+
+  <span class="hljs-meta">@Column</span>(<span class="hljs-string">'jsonb'</span>, { <span class="hljs-keyword">default</span>: { downloads: <span class="hljs-number">0</span>, forks: <span class="hljs-number">0</span>, avgRating: <span class="hljs-number">0</span>, reviewsCount: <span class="hljs-number">0</span> } })
+  usageMetrics: {
+    downloads: <span class="hljs-built_in">number</span>;
+    forks: <span class="hljs-built_in">number</span>;
+    avgRating: <span class="hljs-built_in">number</span>;
+    reviewsCount: <span class="hljs-built_in">number</span>;
+  };
+
+  <span class="hljs-keyword">public</span> trackUsage(metric: <span class="hljs-string">'download'</span> | <span class="hljs-string">'fork'</span>): <span class="hljs-built_in">void</span> {
+    <span class="hljs-keyword">if</span> (metric === <span class="hljs-string">'download'</span>) {
+      <span class="hljs-keyword">this</span>.usageMetrics.downloads += <span class="hljs-number">1</span>;
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (metric === <span class="hljs-string">'fork'</span>) {
+      <span class="hljs-keyword">this</span>.usageMetrics.forks += <span class="hljs-number">1</span>;
+    }
+  }
+
+  <span class="hljs-keyword">public</span> updateRating(rating: <span class="hljs-built_in">number</span>): <span class="hljs-built_in">void</span> {
+    <span class="hljs-keyword">const</span> totalRating = <span class="hljs-keyword">this</span>.usageMetrics.avgRating * <span class="hljs-keyword">this</span>.usageMetrics.reviewsCount;
+    <span class="hljs-keyword">this</span>.usageMetrics.reviewsCount += <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">this</span>.usageMetrics.avgRating = (totalRating + rating) / <span class="hljs-keyword">this</span>.usageMetrics.reviewsCount;
+  }
+}
+</div></code></pre>
+<h3 id="2-repository-implementations">2. Repository Implementations</h3>
+<p>Following the repository pattern to abstract data access:</p>
+<h4 id="user-repository">User Repository</h4>
+<pre class="hljs"><code><div><span class="hljs-comment">// src/infrastructure/repositories/user.repository.ts</span>
+<span class="hljs-keyword">import</span> { Injectable } <span class="hljs-keyword">from</span> <span class="hljs-string">'@nestjs/common'</span>;
+<span class="hljs-keyword">import</span> { InjectRepository } <span class="hljs-keyword">from</span> <span class="hljs-string">'@nestjs/typeorm'</span>;
+<span class="hljs-keyword">import</span> { Repository } <span class="hljs-keyword">from</span> <span class="hljs-string">'typeorm'</span>;
+<span class="hljs-keyword">import</span> { User } <span class="hljs-keyword">from</span> <span class="hljs-string">'../../domain/entities/user.entity'</span>;
+<span class="hljs-keyword">import</span> { IUserRepository } <span class="hljs-keyword">from</span> <span class="hljs-string">'../../domain/repositories/user-repository.interface'</span>;
+<span class="hljs-keyword">import</span> { CreateUserDto } <span class="hljs-keyword">from</span> <span class="hljs-string">'../../application/dtos/user/create-user.dto'</span>;
+<span class="hljs-keyword">import</span> { UpdateUserDto } <span class="hljs-keyword">from</span> <span class="hljs-string">'../../application/dtos/user/update-user.dto'</span>;
+
+<span class="hljs-meta">@Injectable</span>()
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> UserRepository <span class="hljs-keyword">implements</span> IUserRepository {
+  <span class="hljs-keyword">constructor</span>(<span class="hljs-params">
+    <span class="hljs-meta">@InjectRepository</span>(User)
+    <span class="hljs-keyword">private</span> userRepository: Repository&lt;User&gt;,
+  </span>) {}
+
+  <span class="hljs-keyword">async</span> findAll(): <span class="hljs-built_in">Promise</span>&lt;User[]&gt; {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.userRepository.find();
+  }
+
+  <span class="hljs-keyword">async</span> findById(id: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;User | <span class="hljs-literal">null</span>&gt; {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.userRepository.findOne({
+      where: { id },
+      relations: [<span class="hljs-string">'profileInfo'</span>, <span class="hljs-string">'createdComponents'</span>],
+    });
+  }
+
+  <span class="hljs-keyword">async</span> findByEmail(email: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;User | <span class="hljs-literal">null</span>&gt; {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.userRepository.findOne({
+      where: { email },
+      relations: [<span class="hljs-string">'profileInfo'</span>],
+    });
+  }
+
+  <span class="hljs-keyword">async</span> create(createUserDto: CreateUserDto): <span class="hljs-built_in">Promise</span>&lt;User&gt; {
+    <span class="hljs-keyword">const</span> user = <span class="hljs-keyword">this</span>.userRepository.create(createUserDto);
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.userRepository.save(user);
+  }
+
+  <span class="hljs-keyword">async</span> update(id: <span class="hljs-built_in">string</span>, updateUserDto: UpdateUserDto): <span class="hljs-built_in">Promise</span>&lt;User | <span class="hljs-literal">null</span>&gt; {
+    <span class="hljs-keyword">await</span> <span class="hljs-keyword">this</span>.userRepository.update(id, updateUserDto);
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.findById(id);
+  }
+
+  <span class="hljs-keyword">async</span> <span class="hljs-keyword">delete</span>(id: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;<span class="hljs-built_in">boolean</span>&gt; {
+    <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> <span class="hljs-keyword">this</span>.userRepository.delete(id);
+    <span class="hljs-keyword">return</span> result.affected &gt; <span class="hljs-number">0</span>;
+  }
+
+  <span class="hljs-keyword">async</span> getUserWithProgress(id: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;User | <span class="hljs-literal">null</span>&gt; {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.userRepository.findOne({
+      where: { id },
+      relations: [<span class="hljs-string">'learningProgress'</span>, <span class="hljs-string">'profileInfo'</span>],
+    });
+  }
+}
+</div></code></pre>
+<h4 id="learning-module-repository">Learning Module Repository</h4>
+<pre class="hljs"><code><div><span class="hljs-comment">// src/infrastructure/repositories/learning-module.repository.ts</span>
+<span class="hljs-keyword">import</span> { Injectable } <span class="hljs-keyword">from</span> <span class="hljs-string">'@nestjs/common'</span>;
+<span class="hljs-keyword">import</span> { InjectRepository } <span class="hljs-keyword">from</span> <span class="hljs-string">'@nestjs/typeorm'</span>;
+<span class="hljs-keyword">import</span> { Repository } <span class="hljs-keyword">from</span> <span class="hljs-string">'typeorm'</span>;
+<span class="hljs-keyword">import</span> { LearningModule } <span class="hljs-keyword">from</span> <span class="hljs-string">'../../domain/entities/learning-module.entity'</span>;
+<span class="hljs-keyword">import</span> { ILearningModuleRepository } <span class="hljs-keyword">from</span> <span class="hljs-string">'../../domain/repositories/learning-module-repository.interface'</span>;
+<span class="hljs-keyword">import</span> { CreateModuleDto } <span class="hljs-keyword">from</span> <span class="hljs-string">'../../application/dtos/learning/create-module.dto'</span>;
+<span class="hljs-keyword">import</span> { UpdateModuleDto } <span class="hljs-keyword">from</span> <span class="hljs-string">'../../application/dtos/learning/update-module.dto'</span>;
+
+<span class="hljs-meta">@Injectable</span>()
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> LearningModuleRepository <span class="hljs-keyword">implements</span> ILearningModuleRepository {
+  <span class="hljs-keyword">constructor</span>(<span class="hljs-params">
+    <span class="hljs-meta">@InjectRepository</span>(LearningModule)
+    <span class="hljs-keyword">private</span> moduleRepository: Repository&lt;LearningModule&gt;,
+  </span>) {}
+
+  <span class="hljs-keyword">async</span> findAll(filters?: <span class="hljs-built_in">any</span>): <span class="hljs-built_in">Promise</span>&lt;LearningModule[]&gt; {
+    <span class="hljs-keyword">const</span> queryBuilder = <span class="hljs-keyword">this</span>.moduleRepository.createQueryBuilder(<span class="hljs-string">'module'</span>);
+    
+    <span class="hljs-keyword">if</span> (filters?.topic) {
+      queryBuilder.where(<span class="hljs-string">'module.metadata-&gt;\'topics\' ? :topic'</span>, { topic: filters.topic });
+    }
+    
+    <span class="hljs-keyword">if</span> (filters?.difficulty) {
+      queryBuilder.andWhere(<span class="hljs-string">'module.difficulty = :difficulty'</span>, { difficulty: filters.difficulty });
+    }
+    
+    <span class="hljs-keyword">return</span> queryBuilder
+      .leftJoinAndSelect(<span class="hljs-string">'module.topics'</span>, <span class="hljs-string">'topic'</span>)
+      .leftJoinAndSelect(<span class="hljs-string">'module.prerequisites'</span>, <span class="hljs-string">'prerequisite'</span>)
+      .orderBy(<span class="hljs-string">'module.createdAt'</span>, <span class="hljs-string">'DESC'</span>)
+      .getMany();
+  }
+
+  <span class="hljs-keyword">async</span> findById(id: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;LearningModule | <span class="hljs-literal">null</span>&gt; {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.moduleRepository.findOne({
+      where: { id },
+      relations: [<span class="hljs-string">'topics'</span>, <span class="hljs-string">'topics.content'</span>, <span class="hljs-string">'topics.exercises'</span>, <span class="hljs-string">'prerequisites'</span>],
+    });
+  }
+
+  <span class="hljs-keyword">async</span> create(createModuleDto: CreateModuleDto): <span class="hljs-built_in">Promise</span>&lt;LearningModule&gt; {
+    <span class="hljs-keyword">const</span> <span class="hljs-keyword">module</span> = this.moduleRepository.create(createModuleDto);
+    return this.moduleRepository.save(<span class="hljs-keyword">module</span>);
+  }
+
+  async update(id: string, updateModuleDto: UpdateModuleDto): Promise&lt;LearningModule | null&gt; {
+    <span class="hljs-keyword">await</span> <span class="hljs-keyword">this</span>.moduleRepository.update(id, updateModuleDto);
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.findById(id);
+  }
+
+  <span class="hljs-keyword">async</span> <span class="hljs-keyword">delete</span>(id: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;<span class="hljs-built_in">boolean</span>&gt; {
+    <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> <span class="hljs-keyword">this</span>.moduleRepository.delete(id);
+    <span class="hljs-keyword">return</span> result.affected &gt; <span class="hljs-number">0</span>;
+  }
+
+  <span class="hljs-keyword">async</span> findWithPrerequisites(id: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;LearningModule | <span class="hljs-literal">null</span>&gt; {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.moduleRepository.findOne({
+      where: { id },
+      relations: [<span class="hljs-string">'prerequisites'</span>],
+    });
+  }
+}
+</div></code></pre>
+<h3 id="3-service-layer-implementation">3. Service Layer Implementation</h3>
+<p>Implementing the service layer with proper separation of concerns:</p>
+<h4 id="user-service">User Service</h4>
+<pre class="hljs"><code><div><span class="hljs-comment">// src/application/services/user.service.ts</span>
+<span class="hljs-keyword">import</span> { Injectable, ConflictException, NotFoundException, UnauthorizedException } <span class="hljs-keyword">from</span> <span class="hljs-string">'@nestjs/common'</span>;
+<span class="hljs-keyword">import</span> { JwtService } <span class="hljs-keyword">from</span> <span class="hljs-string">'@nestjs/jwt'</span>;
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> bcrypt <span class="hljs-keyword">from</span> <span class="hljs-string">'bcrypt'</span>;
+<span class="hljs-keyword">import</span> { UserRepository } <span class="hljs-keyword">from</span> <span class="hljs-string">'../../infrastructure/repositories/user.repository'</span>;
+<span class="hljs-keyword">import</span> { User } <span class="hljs-keyword">from</span> <span class="hljs-string">'../../domain/entities/user.entity'</span>;
+<span class="hljs-keyword">import</span> { CreateUserDto } <span class="hljs-keyword">from</span> <span class="hljs-string">'../dtos/user/create-user.dto'</span>;
+<span class="hljs-keyword">import</span> { UpdateUserDto } <span class="hljs-keyword">from</span> <span class="hljs-string">'../dtos/user/update-user.dto'</span>;
+<span class="hljs-keyword">import</span> { LoginDto } <span class="hljs-keyword">from</span> <span class="hljs-string">'../dtos/auth/login.dto'</span>;
+<span class="hljs-keyword">import</span> { AuthResponseDto } <span class="hljs-keyword">from</span> <span class="hljs-string">'../dtos/auth/auth-response.dto'</span>;
+<span class="hljs-keyword">import</span> { EventEmitter2 } <span class="hljs-keyword">from</span> <span class="hljs-string">'@nestjs/event-emitter'</span>;
+<span class="hljs-keyword">import</span> { UserRegisteredEvent } <span class="hljs-keyword">from</span> <span class="hljs-string">'../events/user-registered.event'</span>;
+
+<span class="hljs-meta">@Injectable</span>()
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> UserService {
+  <span class="hljs-keyword">constructor</span>(<span class="hljs-params">
+    <span class="hljs-keyword">private</span> readonly userRepository: UserRepository,
+    <span class="hljs-keyword">private</span> readonly jwtService: JwtService,
+    <span class="hljs-keyword">private</span> readonly eventEmitter: EventEmitter2,
+  </span>) {}
+
+  <span class="hljs-keyword">async</span> findAll(): <span class="hljs-built_in">Promise</span>&lt;User[]&gt; {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.userRepository.findAll();
+  }
+
+  <span class="hljs-keyword">async</span> findById(id: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;User&gt; {
+    <span class="hljs-keyword">const</span> user = <span class="hljs-keyword">await</span> <span class="hljs-keyword">this</span>.userRepository.findById(id);
+    <span class="hljs-keyword">if</span> (!user) {
+      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> NotFoundException(<span class="hljs-string">`User with ID <span class="hljs-subst">${id}</span> not found`</span>);
+    }
+    <span class="hljs-keyword">return</span> user;
+  }
+
+  <span class="hljs-keyword">async</span> register(createUserDto: CreateUserDto): <span class="hljs-built_in">Promise</span>&lt;User&gt; {
+    <span class="hljs-keyword">const</span> { email, password, displayName } = createUserDto;
+    
+    <span class="hljs-comment">// Check if user already exists</span>
+    <span class="hljs-keyword">const</span> existingUser = <span class="hljs-keyword">await</span> <span class="hljs-keyword">this</span>.userRepository.findByEmail(email);
+    <span class="hljs-keyword">if</span> (existingUser) {
+      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ConflictException(<span class="hljs-string">'User with this email already exists'</span>);
+    }
+    
+    <span class="hljs-comment">// Hash password</span>
+    <span class="hljs-keyword">const</span> passwordHash = <span class="hljs-keyword">await</span> bcrypt.hash(password, <span class="hljs-number">10</span>);
+    
+    <span class="hljs-comment">// Create user</span>
+    <span class="hljs-keyword">const</span> newUser = <span class="hljs-keyword">await</span> <span class="hljs-keyword">this</span>.userRepository.create({
+      email,
+      displayName,
+      passwordHash,
+      profileInfo: {
+        bio: <span class="hljs-string">''</span>,
+        skills: [],
+        experience: <span class="hljs-string">'beginner'</span>,
+        preferences: {},
+      },
+    });
+    
+    <span class="hljs-comment">// Emit user registered event</span>
+    <span class="hljs-keyword">this</span>.eventEmitter.emit(
+      <span class="hljs-string">'user.registered'</span>,
+      <span class="hljs-keyword">new</span> UserRegisteredEvent(newUser.id, newUser.email),
+    );
+    
+    <span class="hljs-keyword">return</span> newUser;
+  }
+
+  <span class="hljs-keyword">async</span> login(loginDto: LoginDto): <span class="hljs-built_in">Promise</span>&lt;AuthResponseDto&gt; {
+    <span class="hljs-keyword">const</span> { email, password } = loginDto;
+    
+    <span class="hljs-comment">// Find user</span>
+    <span class="hljs-keyword">const</span> user = <span class="hljs-keyword">await</span> <span class="hljs-keyword">this</span>.userRepository.findByEmail(email);
+    <span class="hljs-keyword">if</span> (!user) {
+      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> UnauthorizedException(<span class="hljs-string">'Invalid credentials'</span>);
+    }
+    
+    <span class="hljs-comment">// Verify password</span>
+    <span class="hljs-keyword">const</span> isPasswordValid = <span class="hljs-keyword">await</span> bcrypt.compare(password, user.passwordHash);
+    <span class="hljs-keyword">if</span> (!isPasswordValid) {
+      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> UnauthorizedException(<span class="hljs-string">'Invalid credentials'</span>);
+    }
+    
+    <span class="hljs-comment">// Generate JWT token</span>
+    <span class="hljs-keyword">const</span> payload = { sub: user.id, email: user.email, role: user.role };
+    <span class="hljs-keyword">const</span> token = <span class="hljs-keyword">this</span>.jwtService.sign(payload);
+    
+    <span class="hljs-keyword">return</span> {
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        displayName: user.displayName,
+        role: user.role,
+      },
+    };
+  }
+
+  <span class="hljs-keyword">async</span> update(id: <span class="hljs-built_in">string</span>, updateUserDto: UpdateUserDto): <span class="hljs-built_in">Promise</span>&lt;User&gt; {
+    <span class="hljs-keyword">const</span> user = <span class="hljs-keyword">await</span> <span class="hljs-keyword">this</span>.findById(id);
+    
+    <span class="hljs-keyword">const</span> updatedUser = <span class="hljs-keyword">await</span> <span class="hljs-keyword">this</span>.userRepository.update(id, updateUserDto);
+    <span class="hljs-keyword">if</span> (!updatedUser) {
+      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> NotFoundException(<span class="hljs-string">`Failed to update user with ID <span class="hljs-subst">${id}</span>`</span>);
+    }
+    
+    <span class="hljs-keyword">return</span> updatedUser;
+  }
+
+  <span class="hljs-keyword">async</span> <span class="hljs-keyword">delete</span>(id: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;<span class="hljs-built_in">void</span>&gt; {
+    <span class="hljs-keyword">const</span> user = <span class="hljs-keyword">await</span> <span class="hljs-keyword">this</span>.findById(id);
+    
+    <span class="hljs-keyword">const</span> deleted = <span class="hljs-keyword">await</span> <span class="hljs-keyword">this</span>.userRepository.delete(id);
+    <span class="hljs-keyword">if</span> (!deleted) {
+      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> NotFoundException(<span class="hljs-string">`Failed to delete user with ID <span class="hljs-subst">${id}</span>`</span>);
+    }
+  }
+}
+</div></code></pre>
+<h4 id="ai-education-service">AI Education Service</h4>
+<pre class="hljs"><code><div><span class="hljs-comment">// src/application/services/ai-education.service.ts</span>
+<span class="hljs-keyword">import</span> { Injectable, Logger } <span class="hljs-keyword">from</span> <span class="hljs-string">'@nestjs/common'</span>;
+<span class="hljs-keyword">import</span> { ConfigService } <span class="hljs-keyword">from</span> <span class="hljs-string">'@nestjs/config'</span>;
+<span class="hljs-keyword">import</span> { HttpService } <span class="hljs-keyword">from</span> <span class="hljs-string">'@nestjs/axios'</span>;
+<span class="hljs-keyword">import</span> { firstValueFrom } <span class="hljs-keyword">from</span> <span class="hljs-string">'rxjs'</span>;
+<span class="hljs-keyword">import</span> { UserService } <span class="hljs-keyword">from</span> <span class="hljs-string">'./user.service'</span>;
+<span class="hljs-keyword">import</span> { ExplainConceptDto } <span class="hljs-keyword">from</span> <span class="hljs-string">'../dtos/ai/explain-concept.dto'</span>;
+<span class="hljs-keyword">import</span> { GenerateExampleDto } <span class="hljs-keyword">from</span> <span class="hljs-string">'../dtos/ai/generate-example.dto'</span>;
+<span class="hljs-keyword">import</span> { AIResponseDto } <span class="hljs-keyword">from</span> <span class="hljs-string">'../dtos/ai/ai-response.dto'</span>;
+<span class="hljs-keyword">import</span> { PerformanceMetricsService } <span class="hljs-keyword">from</span> <span class="hljs-string">'./performance-metrics.service'</span>;
+
+<span class="hljs-meta">@Injectable</span>()
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> AIEducationService {
+  <span class="hljs-keyword">private</span> readonly logger = <span class="hljs-keyword">new</span> Logger(AIEducationService.name);
+
+  <span class="hljs-keyword">constructor</span>(<span class="hljs-params">
+    <span class="hljs-keyword">private</span> readonly httpService: HttpService,
+    <span class="hljs-keyword">private</span> readonly configService: ConfigService,
+    <span class="hljs-keyword">private</span> readonly userService: UserService,
+    <span class="hljs-keyword">private</span> readonly metricsService: PerformanceMetricsService,
+  </span>) {}
+
+  <span class="hljs-keyword">async</span> explainConcept(userId: <span class="hljs-built_in">string</span>, dto: ExplainConceptDto): <span class="hljs-built_in">Promise</span>&lt;AIResponseDto&gt; {
+    <span class="hljs-keyword">const</span> startTime = <span class="hljs-built_in">Date</span>.now();
+    
+    <span class="hljs-keyword">try</span> {
+      <span class="hljs-comment">// Get user's experience level</span>
+      <span class="hljs-keyword">const</span> user = <span class="hljs-keyword">await</span> <span class="hljs-keyword">this</span>.userService.findById(userId);
+      <span class="hljs-keyword">const</span> experienceLevel = user.profileInfo?.experience || <span class="hljs-string">'beginner'</span>;
+      
+      <span class="hljs-comment">// Prepare prompt based on user's experience level</span>
+      <span class="hljs-keyword">const</span> prompt = <span class="hljs-keyword">this</span>.buildConceptPrompt(dto.concept, experienceLevel);
+      
+      <span class="hljs-comment">// Call AI model API</span>
+      <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-keyword">this</span>.callAIModel(prompt);
+      
+      <span class="hljs-comment">// Track performance metrics</span>
+      <span class="hljs-keyword">const</span> duration = <span class="hljs-built_in">Date</span>.now() - startTime;
+      <span class="hljs-keyword">await</span> <span class="hljs-keyword">this</span>.metricsService.trackAIResponse(<span class="hljs-string">'education'</span>, <span class="hljs-string">'explain_concept'</span>, duration);
+      
+      <span class="hljs-keyword">return</span> {
+        content: response.explanation,
+        references: response.references || [],
+        relatedConcepts: response.relatedConcepts || [],
+      };
+    } <span class="hljs-keyword">catch</span> (error) {
+      <span class="hljs-keyword">this</span>.logger.error(<span class="hljs-string">`Error explaining concept: <span class="hljs-subst">${error.message}</span>`</span>, error.stack);
+      
+      <span class="hljs-comment">// Track error</span>
+      <span class="hljs-keyword">await</span> <span class="hljs-keyword">this</span>.metricsService.trackAIError(<span class="hljs-string">'education'</span>, <span class="hljs-string">'explain_concept'</span>, error.message);
+      
+      <span class="hljs-comment">// Return fallback response</span>
+      <span class="hljs-keyword">return</span> {
+        content: <span class="hljs-string">`I'm sorry, I couldn't generate an explanation for "<span class="hljs-subst">${dto.concept}</span>" at this time. Please try again later.`</span>,
+        references: [],
+        relatedConcepts: [],
+      };
+    }
+  }
+
+  <span class="hljs-keyword">async</span> generateExample(userId: <span class="hljs-built_in">string</span>, dto: GenerateExampleDto): <span class="hljs-built_in">Promise</span>&lt;AIResponseDto&gt; {
+    <span class="hljs-keyword">const</span> startTime = <span class="hljs-built_in">Date</span>.now();
+    
+    <span class="hljs-keyword">try</span> {
+      <span class="hljs-comment">// Get user's experience level</span>
+      <span class="hljs-keyword">const</span> user = <span class="hljs-keyword">await</span> <span class="hljs-keyword">this</span>.userService.findById(userId);
+      <span class="hljs-keyword">const</span> experienceLevel = user.profileInfo?.experience || <span class="hljs-string">'beginner'</span>;
+      
+      <span class="hljs-comment">// Prepare prompt based on user's experience level</span>
+      <span class="hljs-keyword">const</span> prompt = <span class="hljs-keyword">this</span>.buildExamplePrompt(dto.concept, dto.context, experienceLevel);
+      
+      <span class="hljs-comment">// Call AI model API</span>
+      <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-keyword">this</span>.callAIModel(prompt);
+      
+      <span class="hljs-comment">// Track performance metrics</span>
+      <span class="hljs-keyword">const</span> duration = <span class="hljs-built_in">Date</span>.now() - startTime;
+      <span class="hljs-keyword">await</span> <span class="hljs-keyword">this</span>.metricsService.trackAIResponse(<span class="hljs-string">'education'</span>, <span class="hljs-string">'generate_example'</span>, duration);
+      
+      <span class="hljs-keyword">return</span> {
+        content: response.example,
+        codeSnippet: response.codeSnippet,
+        explanation: response.explanation,
+      };
+    } <span class="hljs-keyword">catch</span> (error) {
+      <span class="hljs-keyword">this</span>.logger.error(<span class="hljs-string">`Error generating example: <span class="hljs-subst">${error.message}</span>`</span>, error.stack);
+      
+      <span class="hljs-comment">// Track error</span>
+      <span class="hljs-keyword">await</span> <span class="hljs-keyword">this</span>.metricsService.trackAIError(<span class="hljs-string">'education'</span>, <span class="hljs-string">'generate_example'</span>, error.message);
+      
+      <span class="hljs-comment">// Return fallback response</span>
+      <span class="hljs-keyword">return</span> {
+        content: <span class="hljs-string">`I'm sorry, I couldn't generate an example for "<span class="hljs-subst">${dto.concept}</span>" at this time. Please try again later.`</span>,
+        codeSnippet: <span class="hljs-string">''</span>,
+        explanation: <span class="hljs-string">''</span>,
+      };
+    }
+  }
+
+  <span class="hljs-keyword">private</span> buildConceptPrompt(concept: <span class="hljs-built_in">string</span>, experienceLevel: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">string</span> {
+    <span class="hljs-keyword">const</span> levelModifier = <span class="hljs-keyword">this</span>.getExperienceLevelModifier(experienceLevel);
+    <span class="hljs-keyword">return</span> <span class="hljs-string">`Explain the Web3 concept of "<span class="hljs-subst">${concept}</span>" <span class="hljs-subst">${levelModifier}</span>. Include key points, practical applications, and any important considerations.`</span>;
+  }
+
+  <span class="hljs-keyword">private</span> buildExamplePrompt(concept: <span class="hljs-built_in">string</span>, context: <span class="hljs-built_in">string</span>, experienceLevel: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">string</span> {
+    <span class="hljs-keyword">const</span> levelModifier = <span class="hljs-keyword">this</span>.getExperienceLevelModifier(experienceLevel);
+    <span class="hljs-keyword">const</span> contextPrompt = context ? <span class="hljs-string">` in the context of <span class="hljs-subst">${context}</span>`</span> : <span class="hljs-string">''</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-string">`Generate a practical example of "<span class="hljs-subst">${concept}</span>"<span class="hljs-subst">${contextPrompt}</span> <span class="hljs-subst">${levelModifier}</span>. Include code snippet and explanation.`</span>;
+  }
+
+  <span class="hljs-keyword">private</span> getExperienceLevelModifier(level: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">string</span> {
+    <span class="hljs-keyword">switch</span> (level) {
+      <span class="hljs-keyword">case</span> <span class="hljs-string">'beginner'</span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-string">'in simple terms, avoiding technical jargon'</span>;
+      <span class="hljs-keyword">case</span> <span class="hljs-string">'intermediate'</span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-string">'with moderate technical detail'</span>;
+      <span class="hljs-keyword">case</span> <span class="hljs-string">'advanced'</span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-string">'with in-depth technical details'</span>;
+      <span class="hljs-keyword">default</span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-string">'in simple terms'</span>;
+    }
+  }
+
+  <span class="hljs-keyword">private</span> <span class="hljs-keyword">async</span> callAIModel(prompt: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;<span class="hljs-built_in">any</span>&gt; {
+    <span class="hljs-keyword">const</span> aiModelEndpoint = <span class="hljs-keyword">this</span>.configService.get&lt;<span class="hljs-built_in">string</span>&gt;(<span class="hljs-string">'AI_MODEL_ENDPOINT'</span>);
+    <span class="hljs-keyword">const</span> apiKey = <span class="hljs-keyword">this</span>.configService.get&lt;<span class="hljs-built_in">string</span>&gt;(<span class="hljs-string">'AI_MODEL_API_KEY'</span>);
+    
+    <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> firstValueFrom(
+      <span class="hljs-keyword">this</span>.httpService.post(
+        aiModelEndpoint,
+        {
+          prompt,
+          max_tokens: <span class="hljs-number">1000</span>,
+          temperature: <span class="hljs-number">0.7</span>,
+        },
+        {
+          headers: {
+            <span class="hljs-string">'Authorization'</span>: <span class="hljs-string">`Bearer <span class="hljs-subst">${apiKey}</span>`</span>,
+            <span class="hljs-string">'Content-Type'</span>: <span class="hljs-string">'application/json'</span>,
+          },
+        },
+      ),
+    );
+    
+    <span class="hljs-keyword">return</span> response.data;
+  }
+}
+</div></code></pre>
+<h3 id="4-controller-implementation">4. Controller Implementation</h3>
+<p>Implementing REST API controllers:</p>
+<h4 id="learning-module-controller">Learning Module Controller</h4>
+<pre class="hljs"><code><div><span class="hljs-comment">// src/api/controllers/learning-module.controller.ts</span>
+<span class="hljs-keyword">import</span> {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+  Query,
+  UseGuards,
+  HttpStatus,
+  HttpCode,
+} <span class="hljs-keyword">from</span> <span class="hljs-string">'@nestjs/common'</span>;
+<span class="hljs-keyword">import</span> { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } <span class="hljs-keyword">from</span> <span class="hljs-string">'@nestjs/swagger'</span>;
+<span class="hljs-keyword">import</span> { JwtAuthGuard } <span class="hljs-keyword">from</span> <span class="hljs-string">'../guards/jwt-auth.guard'</span>;
+<span class="hljs-keyword">import</span> { RolesGuard } <span class="hljs-keyword">from</span> <span class="hljs-string">'../guards/roles.guard'</span>;
+<span class="hljs-keyword">import</span> { Roles } <span class="hljs-keyword">from</span> <span class="hljs-string">'../decorators/roles.decorator'</span>;
+<span class="hljs-keyword">import</span> { UserRole } <span class="hljs-keyword">from</span> <span class="hljs-string">'../../domain/entities/user.entity'</span>;
+<span class="hljs-keyword">import</span> { LearningModuleService } <span class="hljs-keyword">from</span> <span class="hljs-string">'../../application/services/learning-module.service'</span>;
+<span class="hljs-keyword">import</span> { CreateModuleDto } <span class="hljs-keyword">from</span> <span class="hljs-string">'../../application/dtos/learning/create-module.dto'</span>;
+<span class="hljs-keyword">import</span> { UpdateModuleDto } <span class="hljs-keyword">from</span> <span class="hljs-string">'../../application/dtos/learning/update-module.dto'</span>;
+<span class="hljs-keyword">import</span> { ModuleResponseDto } <span class="hljs-keyword">from</span> <span class="hljs-string">'../../application/dtos/learning/module-response.dto'</span>;
+<span class="hljs-keyword">import</span> { CurrentUser } <span class="hljs-keyword">from</span> <span class="hljs-string">'../decorators/current-user.decorator'</span>;
+
+<span class="hljs-meta">@ApiTags</span>(<span class="hljs-string">'learning-modules'</span>)
+<span class="hljs-meta">@Controller</span>(<span class="hljs-string">'learning-modules'</span>)
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> LearningModuleController {
+  <span class="hljs-keyword">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> readonly learningModuleService: LearningModuleService</span>) {}
+
+  <span class="hljs-meta">@Get</span>()
+  <span class="hljs-meta">@ApiOperation</span>({ summary: <span class="hljs-string">'Get all learning modules'</span> })
+  <span class="hljs-meta">@ApiResponse</span>({ status: HttpStatus.OK, description: <span class="hljs-string">'Return all modules'</span>, <span class="hljs-keyword">type</span>: [ModuleResponseDto] })
+  <span class="hljs-meta">@ApiQuery</span>({ name: <span class="hljs-string">'topic'</span>, required: <span class="hljs-literal">false</span>, description: <span class="hljs-string">'Filter by topic'</span> })
+  <span class="hljs-meta">@ApiQuery</span>({ name: <span class="hljs-string">'difficulty'</span>, required: <span class="hljs-literal">false</span>, description: <span class="hljs-string">'Filter by difficulty level'</span> })
+  <span class="hljs-keyword">async</span> findAll(
+    <span class="hljs-meta">@Query</span>(<span class="hljs-string">'topic'</span>) topic?: <span class="hljs-built_in">string</span>,
+    <span class="hljs-meta">@Query</span>(<span class="hljs-string">'difficulty'</span>) difficulty?: <span class="hljs-built_in">string</span>,
+  ): <span class="hljs-built_in">Promise</span>&lt;ModuleResponseDto[]&gt; {
+    <span class="hljs-keyword">const</span> filters = { topic, difficulty };
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.learningModuleService.findAll(filters);
+  }
+
+  <span class="hljs-meta">@Get</span>(<span class="hljs-string">':id'</span>)
+  <span class="hljs-meta">@ApiOperation</span>({ summary: <span class="hljs-string">'Get a learning module by ID'</span> })
+  <span class="hljs-meta">@ApiResponse</span>({ status: HttpStatus.OK, description: <span class="hljs-string">'Return the module'</span>, <span class="hljs-keyword">type</span>: ModuleResponseDto })
+  <span class="hljs-meta">@ApiResponse</span>({ status: HttpStatus.NOT_FOUND, description: <span class="hljs-string">'Module not found'</span> })
+  <span class="hljs-keyword">async</span> findOne(<span class="hljs-meta">@Param</span>(<span class="hljs-string">'id'</span>) id: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;ModuleResponseDto&gt; {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.learningModuleService.findById(id);
+  }
+
+  <span class="hljs-meta">@Post</span>()
+  <span class="hljs-meta">@UseGuards</span>(JwtAuthGuard, RolesGuard)
+  <span class="hljs-meta">@Roles</span>(UserRole.EDUCATOR, UserRole.ADMIN)
+  <span class="hljs-meta">@ApiOperation</span>({ summary: <span class="hljs-string">'Create a new learning module'</span> })
+  <span class="hljs-meta">@ApiResponse</span>({ status: HttpStatus.CREATED, description: <span class="hljs-string">'Module created successfully'</span>, <span class="hljs-keyword">type</span>: ModuleResponseDto })
+  <span class="hljs-meta">@ApiBearerAuth</span>()
+  <span class="hljs-keyword">async</span> create(<span class="hljs-meta">@Body</span>() createModuleDto: CreateModuleDto): <span class="hljs-built_in">Promise</span>&lt;ModuleResponseDto&gt; {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.learningModuleService.create(createModuleDto);
+  }
+
+  <span class="hljs-meta">@Put</span>(<span class="hljs-string">':id'</span>)
+  <span class="hljs-meta">@UseGuards</span>(JwtAuthGuard, RolesGuard)
+  <span class="hljs-meta">@Roles</span>(UserRole.EDUCATOR, UserRole.ADMIN)
+  <span class="hljs-meta">@ApiOperation</span>({ summary: <span class="hljs-string">'Update a learning module'</span> })
+  <span class="hljs-meta">@ApiResponse</span>({ status: HttpStatus.OK, description: <span class="hljs-string">'Module updated successfully'</span>, <span class="hljs-keyword">type</span>: ModuleResponseDto })
+  <span class="hljs-meta">@ApiResponse</span>({ status: HttpStatus.NOT_FOUND, description: <span class="hljs-string">'Module not found'</span> })
+  <span class="hljs-meta">@ApiBearerAuth</span>()
+  <span class="hljs-keyword">async</span> update(
+    <span class="hljs-meta">@Param</span>(<span class="hljs-string">'id'</span>) id: <span class="hljs-built_in">string</span>,
+    <span class="hljs-meta">@Body</span>() updateModuleDto: UpdateModuleDto,
+  ): <span class="hljs-built_in">Promise</span>&lt;ModuleResponseDto&gt; {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.learningModuleService.update(id, updateModuleDto);
+  }
+
+  <span class="hljs-meta">@Delete</span>(<span class="hljs-string">':id'</span>)
+  <span class="hljs-meta">@UseGuards</span>(JwtAuthGuard, RolesGuard)
+  <span class="hljs-meta">@Roles</span>(UserRole.ADMIN)
+  <span class="hljs-meta">@HttpCode</span>(HttpStatus.NO_CONTENT)
+  <span class="hljs-meta">@ApiOperation</span>({ summary: <span class="hljs-string">'Delete a learning module'</span> })
+  <span class="hljs-meta">@ApiResponse</span>({ status: HttpStatus.NO_CONTENT, description: <span class="hljs-string">'Module deleted successfully'</span> })
+  <span class="hljs-meta">@ApiResponse</span>({ status: HttpStatus.NOT_FOUND, description: <span class="hljs-string">'Module not found'</span> })
+  <span class="hljs-meta">@ApiBearerAuth</span>()
+  <span class="hljs-keyword">async</span> remove(<span class="hljs-meta">@Param</span>(<span class="hljs-string">'id'</span>) id: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;<span class="hljs-built_in">void</span>&gt; {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.learningModuleService.delete(id);
+  }
+
+  <span class="hljs-meta">@Get</span>(<span class="hljs-string">':id/progress'</span>)
+  <span class="hljs-meta">@UseGuards</span>(JwtAuthGuard)
+  <span class="hljs-meta">@ApiOperation</span>({ summary: <span class="hljs-string">'Get user progress for a specific module'</span> })
+  <span class="hljs-meta">@ApiResponse</span>({ status: HttpStatus.OK, description: <span class="hljs-string">'Return module progress'</span> })
+  <span class="hljs-meta">@ApiBearerAuth</span>()
+  <span class="hljs-keyword">async</span> getModuleProgress(
+    <span class="hljs-meta">@Param</span>(<span class="hljs-string">'id'</span>) moduleId: <span class="hljs-built_in">string</span>,
+    <span class="hljs-meta">@CurrentUser</span>() userId: <span class="hljs-built_in">string</span>,
+  ): <span class="hljs-built_in">Promise</span>&lt;<span class="hljs-built_in">any</span>&gt; {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.learningModuleService.getUserModuleProgress(userId, moduleId);
+  }
+}
+</div></code></pre>
+<h4 id="ai-assistant-controller">AI Assistant Controller</h4>
+<pre class="hljs"><code><div><span class="hljs-comment">// src/api/controllers/ai-assistant.controller.ts</span>
+<span class="hljs-keyword">import</span> {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  HttpStatus,
+  Logger,
+} <span class="hljs-keyword">from</span> <span class="hljs-string">'@nestjs/common'</span>;
+<span class="hljs-keyword">import</span> { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } <span class="hljs-keyword">from</span> <span class="hljs-string">'@nestjs/swagger'</span>;
+<span class="hljs-keyword">import</span> { JwtAuthGuard } <span class="hljs-keyword">from</span> <span class="hljs-string">'../guards/jwt-auth.guard'</span>;
+<span class="hljs-keyword">import</span> { AIEducationService } <span class="hljs-keyword">from</span> <span class="hljs-string">'../../application/services/ai-education.service'</span>;
+<span class="hljs-keyword">import</span> { AIDevelopmentService } <span class="hljs-keyword">from</span> <span class="hljs-string">'../../application/services/ai-development.service'</span>;
+<span class="hljs-keyword">import</span> { ExplainConceptDto } <span class="hljs-keyword">from</span> <span class="hljs-string">'../../application/dtos/ai/explain-concept.dto'</span>;
+<span class="hljs-keyword">import</span> { GenerateExampleDto } <span class="hljs-keyword">from</span> <span class="hljs-string">'../../application/dtos/ai/generate-example.dto'</span>;
+<span class="hljs-keyword">import</span> { SuggestImplementationDto } <span class="hljs-keyword">from</span> <span class="hljs-string">'../../application/dtos/ai/suggest-implementation.dto'</span>;
+<span class="hljs-keyword">import</span> { ReviewCodeDto } <span class="hljs-keyword">from</span> <span class="hljs-string">'../../application/dtos/ai/review-code.dto'</span>;
+<span class="hljs-keyword">import</span> { AIResponseDto } <span class="hljs-keyword">from</span> <span class="hljs-string">'../../application/dtos/ai/ai-response.dto'</span>;
+<span class="hljs-keyword">import</span> { CurrentUser } <span class="hljs-keyword">from</span> <span class="hljs-string">'../decorators/current-user.decorator'</span>;
+
+<span class="hljs-meta">@ApiTags</span>(<span class="hljs-string">'ai-assistant'</span>)
+<span class="hljs-meta">@Controller</span>(<span class="hljs-string">'ai'</span>)
+<span class="hljs-meta">@UseGuards</span>(JwtAuthGuard)
+<span class="hljs-meta">@ApiBearerAuth</span>()
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> AIAssistantController {
+  <span class="hljs-keyword">private</span> readonly logger = <span class="hljs-keyword">new</span> Logger(AIAssistantController.name);
+
+  <span class="hljs-keyword">constructor</span>(<span class="hljs-params">
+    <span class="hljs-keyword">private</span> readonly aiEducationService: AIEducationService,
+    <span class="hljs-keyword">private</span> readonly aiDevelopmentService: AIDevelopmentService,
+  </span>) {}
+
+  <span class="hljs-meta">@Post</span>(<span class="hljs-string">'education/explain'</span>)
+  <span class="hljs-meta">@ApiOperation</span>({ summary: <span class="hljs-string">'Get AI explanation for a Web3 concept'</span> })
+  <span class="hljs-meta">@ApiResponse</span>({ status: HttpStatus.OK, description: <span class="hljs-string">'Return AI explanation'</span>, <span class="hljs-keyword">type</span>: AIResponseDto })
+  <span class="hljs-keyword">async</span> explainConcept(
+    <span class="hljs-meta">@Body</span>() explainConceptDto: ExplainConceptDto,
+    <span class="hljs-meta">@CurrentUser</span>() userId: <span class="hljs-built_in">string</span>,
+  ): <span class="hljs-built_in">Promise</span>&lt;AIResponseDto&gt; {
+    <span class="hljs-keyword">this</span>.logger.log(<span class="hljs-string">`User <span class="hljs-subst">${userId}</span> requested explanation for: <span class="hljs-subst">${explainConceptDto.concept}</span>`</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.aiEducationService.explainConcept(userId, explainConceptDto);
+  }
+
+  <span class="hljs-meta">@Post</span>(<span class="hljs-string">'education/example'</span>)
+  <span class="hljs-meta">@ApiOperation</span>({ summary: <span class="hljs-string">'Generate example for a Web3 concept'</span> })
+  <span class="hljs-meta">@ApiResponse</span>({ status: HttpStatus.OK, description: <span class="hljs-string">'Return generated example'</span>, <span class="hljs-keyword">type</span>: AIResponseDto })
+  <span class="hljs-keyword">async</span> generateExample(
+    <span class="hljs-meta">@Body</span>() generateExampleDto: GenerateExampleDto,
+    <span class="hljs-meta">@CurrentUser</span>() userId: <span class="hljs-built_in">string</span>,
+  ): <span class="hljs-built_in">Promise</span>&lt;AIResponseDto&gt; {
+    <span class="hljs-keyword">this</span>.logger.log(<span class="hljs-string">`User <span class="hljs-subst">${userId}</span> requested example for: <span class="hljs-subst">${generateExampleDto.concept}</span>`</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.aiEducationService.generateExample(userId, generateExampleDto);
+  }
+
+  <span class="hljs-meta">@Post</span>(<span class="hljs-string">'development/suggest'</span>)
+  <span class="hljs-meta">@ApiOperation</span>({ summary: <span class="hljs-string">'Get AI implementation suggestion'</span> })
+  <span class="hljs-meta">@ApiResponse</span>({ status: Http
+</div></code></pre>
+
+</body>
+</html>

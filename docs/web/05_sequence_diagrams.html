@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>05_sequence_diagrams.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="brotea-sequence-diagrams">Brotea: Sequence Diagrams</h1>
+<p>This document provides detailed sequence diagrams for key interactions within the Brotea platform, illustrating how different components communicate to fulfill core business flows, technical processes, and integration scenarios.</p>
+<h2 id="core-business-flows">Core Business Flows</h2>
+<h3 id="1-user-learning-flow">1. User Learning Flow</h3>
+<p>This sequence diagram illustrates how a user interacts with the platform to access and complete educational content on Web3 technologies.</p>
+<pre><code class="language-mermaid"><div class="mermaid">sequenceDiagram
+    actor User
+    participant UI as Learning Interface
+    participant API as API Gateway
+    participant LS as Learning Service
+    participant PS as Progress Service
+    participant AI as AI Education Assistant
+    participant DB as Content Database
+    
+    User->>UI: Select Web3 topic
+    UI->>API: GET /modules?topic={topic}
+    API->>LS: getModules(topic)
+    LS->>DB: Query modules by topic
+    DB-->>LS: Return matching modules
+    LS-->>API: Return module list
+    API-->>UI: Return module data
+    UI->>UI: Render module selection
+    
+    User->>UI: Select specific module
+    UI->>API: GET /modules/{moduleId}
+    API->>LS: getModuleById(moduleId)
+    LS->>DB: Query module details
+    DB-->>LS: Return module data
+    LS-->>API: Return module details
+    API-->>UI: Return module content
+    UI->>UI: Render module content
+    
+    User->>UI: Request AI explanation
+    UI->>API: POST /ai/explain
+    API->>AI: explainConcept(concept, userLevel)
+    AI->>AI: Generate explanation
+    AI-->>API: Return explanation
+    API-->>UI: Return AI response
+    UI->>UI: Display explanation
+    
+    User->>UI: Complete topic
+    UI->>API: POST /progress/update
+    API->>PS: updateProgress(userId, entityId, status)
+    PS->>DB: Save progress data
+    PS->>PS: Check for achievements
+    PS-->>API: Return updated progress
+    API-->>UI: Confirm progress update
+    UI->>UI: Show completion status
+    
+    Note over User,DB: The system tracks user progress and adapts content difficulty
+</div></code></pre>
+<h3 id="2-component-creation-flow">2. Component Creation Flow</h3>
+<p>This sequence diagram shows how a developer creates a new mobile component with AI assistance.</p>
+<pre><code class="language-mermaid"><div class="mermaid">sequenceDiagram
+    actor Developer
+    participant UI as Development Interface
+    participant API as API Gateway
+    participant CS as Component Service
+    participant AI as AI Development Assistant
+    participant RS as Repository Service
+    participant DB as Component Database
+    
+    Developer->>UI: Initiate component creation
+    UI->>API: GET /components/templates
+    API->>CS: getComponentTemplates()
+    CS->>DB: Query available templates
+    DB-->>CS: Return templates
+    CS-->>API: Return template list
+    API-->>UI: Return template options
+    UI->>UI: Display template selection
+    
+    Developer->>UI: Select template & parameters
+    UI->>API: POST /ai/development/assist
+    API->>AI: suggestImplementation(requirements, platform, framework)
+    AI->>AI: Generate implementation
+    AI-->>API: Return implementation suggestion
+    API-->>UI: Return code suggestion
+    UI->>UI: Display suggested implementation
+    
+    Developer->>UI: Modify implementation
+    Note over Developer,UI: Iterative development with AI assistance
+    
+    Developer->>UI: Request code review
+    UI->>API: POST /ai/development/review
+    API->>AI: reviewCode(code)
+    AI->>AI: Analyze code quality
+    AI-->>API: Return review feedback
+    API-->>UI: Return review results
+    UI->>UI: Display review feedback
+    
+    Developer->>UI: Finalize component
+    UI->>API: POST /components
+    API->>CS: createComponent(componentData)
+    CS->>RS: initializeRepository(componentData)
+    RS-->>CS: Return repository info
+    CS->>DB: Save component metadata
+    DB-->>CS: Confirm save
+    CS-->>API: Return component details
+    API-->>UI: Confirm component creation
+    UI->>UI: Display success message
+    
+    Note over Developer,DB: Component is now available in the repository
+</div></code></pre>
+<h3 id="3-component-search-and-reuse-flow">3. Component Search and Reuse Flow</h3>
+<p>This sequence diagram illustrates how a user searches for and reuses an existing component.</p>
+<pre><code class="language-mermaid"><div class="mermaid">sequenceDiagram
+    actor User
+    participant UI as Repository Interface
+    participant API as API Gateway
+    participant CS as Component Service
+    participant SS as Search Service
+    participant RS as Repository Service
+    participant DB as Component Database
+    
+    User->>UI: Enter search criteria
+    UI->>API: GET /components/search?q={query}
+    API->>SS: searchComponents(query, filters)
+    SS->>DB: Execute search query
+    DB-->>SS: Return matching components
+    SS-->>API: Return search results
+    API-->>UI: Return component list
+    UI->>UI: Display search results
+    
+    User->>UI: Select component
+    UI->>API: GET /components/{componentId}
+    API->>CS: getComponentById(componentId)
+    CS->>DB: Query component details
+    DB-->>CS: Return component data
+    CS-->>API: Return component details
+    API-->>UI: Return component data
+    UI->>UI: Display component details
+    
+    User->>UI: View component code
+    UI->>API: GET /components/{componentId}/source
+    API->>CS: getSourceCode(componentId)
+    CS->>RS: fetchRepositoryContent(componentId)
+    RS-->>CS: Return source code
+    CS-->>API: Return code files
+    API-->>UI: Return source code
+    UI->>UI: Display code with syntax highlighting
+    
+    User->>UI: Fork component
+    UI->>API: POST /components/{componentId}/fork
+    API->>CS: forkComponent(componentId, userId)
+    CS->>RS: forkRepository(componentId, userId)
+    RS-->>CS: Return new repository info
+    CS->>DB: Save forked component metadata
+    DB-->>CS: Confirm save
+    CS-->>API: Return forked component details
+    API-->>UI: Return fork confirmation
+    UI->>UI: Display fork success
+    
+    Note over User,DB: User now has their own copy of the component to modify
+</div></code></pre>
+<h2 id="technical-flows">Technical Flows</h2>
+<h3 id="1-user-authentication-flow">1. User Authentication Flow</h3>
+<p>This sequence diagram shows the authentication process when a user logs into the platform.</p>
+<pre><code class="language-mermaid"><div class="mermaid">sequenceDiagram
+    actor User
+    participant UI as Login Interface
+    participant API as API Gateway
+    participant Auth as Authentication Service
+    participant US as User Service
+    participant DB as User Database
+    participant JWT as JWT Service
+    
+    User->>UI: Enter credentials
+    UI->>API: POST /auth/login
+    API->>Auth: authenticateUser(email, password)
+    Auth->>DB: Query user by email
+    DB-->>Auth: Return user data
+    
+    alt Invalid User
+        Auth-->>API: Return authentication error
+        API-->>UI: Return error message
+        UI->>UI: Display error
+    else Valid User
+        Auth->>Auth: Verify password hash
+        
+        alt Invalid Password
+            Auth-->>API: Return authentication error
+            API-->>UI: Return error message
+            UI->>UI: Display error
+        else Valid Password
+            Auth->>JWT: generateToken(userId, roles)
+            JWT-->>Auth: Return JWT token
+            Auth->>US: recordLoginActivity(userId)
+            US->>DB: Update last login timestamp
+            Auth-->>API: Return authentication success + token
+            API-->>UI: Return success + token
+            UI->>UI: Store token & redirect to dashboard
+        end
+    end
+    
+    Note over User,DB: Token is used for subsequent API calls
+</div></code></pre>
+<h3 id="2-ai-assistant-training-update-flow">2. AI Assistant Training Update Flow</h3>
+<p>This sequence diagram illustrates the process of updating an AI assistant with new training data.</p>
+<pre><code class="language-mermaid"><div class="mermaid">sequenceDiagram
+    actor Admin
+    participant UI as Admin Interface
+    participant API as API Gateway
+    participant AIS as AI Service
+    participant TS as Training Service
+    participant ML as ML Pipeline
+    participant DB as AI Model Database
+    
+    Admin->>UI: Upload new training data
+    UI->>API: POST /admin/ai/training
+    API->>AIS: updateTrainingData(assistantId, trainingData)
+    AIS->>DB: Store training data
+    DB-->>AIS: Confirm storage
+    AIS->>TS: scheduleTraining(assistantId)
+    TS-->>AIS: Return training job ID
+    AIS-->>API: Return job confirmation
+    API-->>UI: Display training scheduled
+    
+    TS->>ML: initializeTraining(assistantId, datasetId)
+    ML->>DB: Fetch current model
+    DB-->>ML: Return model
+    ML->>ML: Train model on new data
+    
+    alt Training Failed
+        ML-->>TS: Report training failure
+        TS->>AIS: notifyTrainingFailure(jobId, error)
+        AIS-->>API: Send training failure event
+        API-->>UI: Display training error
+    else Training Succeeded
+        ML->>DB: Save updated model
+        DB-->>ML: Confirm save
+        ML-->>TS: Report training success
+        TS->>AIS: notifyTrainingSuccess(jobId, metrics)
+        AIS->>AIS: updateAssistantCapabilities()
+        AIS-->>API: Send training success event
+        API-->>UI: Display training complete
+    end
+    
+    Note over Admin,DB: AI assistant now has improved capabilities
+</div></code></pre>
+<h3 id="3-analytics-data-collection-flow">3. Analytics Data Collection Flow</h3>
+<p>This sequence diagram shows how user activity is tracked and processed for analytics.</p>
+<pre><code class="language-mermaid"><div class="mermaid">sequenceDiagram
+    actor User
+    participant UI as Platform Interface
+    participant API as API Gateway
+    participant AS as Analytics Service
+    participant ES as Event Stream
+    participant PS as Processing Service
+    participant DW as Data Warehouse
+    
+    User->>UI: Perform action (view, click, etc.)
+    UI->>UI: Capture event details
+    UI->>API: POST /analytics/event
+    API->>AS: trackEvent(userId, eventType, metadata)
+    AS->>ES: publishEvent(eventData)
+    AS-->>API: Acknowledge receipt
+    API-->>UI: Confirm tracking
+    
+    ES->>PS: consumeEvent(eventData)
+    PS->>PS: Process and enrich event
+    PS->>DW: storeProcessedEvent(enrichedData)
+    DW-->>PS: Confirm storage
+    
+    loop Periodic Aggregation
+        PS->>DW: queryRecentEvents(timeWindow)
+        DW-->>PS: Return event batch
+        PS->>PS: Aggregate metrics
+        PS->>DW: updateAggregates(metrics)
+        DW-->>PS: Confirm update
+    end
+    
+    Note over User,DW: Analytics data is available for reporting
+</div></code></pre>
+<h2 id="integration-flows">Integration Flows</h2>
+<h3 id="1-web3-platform-integration-flow">1. Web3 Platform Integration Flow</h3>
+<p>This sequence diagram illustrates how the platform integrates with external Web3 networks for educational content.</p>
+<pre><code class="language-mermaid"><div class="mermaid">sequenceDiagram
+    actor User
+    participant UI as Learning Interface
+    participant API as API Gateway
+    participant LS as Learning Service
+    participant W3I as Web3 Integration Service
+    participant BC as Blockchain Network
+    participant DB as Content Database
+    
+    User->>UI: Request blockchain example
+    UI->>API: GET /learning/web3/examples/{conceptId}
+    API->>LS: getWeb3Example(conceptId)
+    LS->>DB: Query example metadata
+    DB-->>LS: Return example config
+    
+    LS->>W3I: fetchLiveExample(networkId, contractAddress)
+    W3I->>BC: Call smart contract read method
+    BC-->>W3I: Return contract data
+    W3I->>W3I: Format data for display
+    W3I-->>LS: Return formatted example
+    
+    LS->>DB: Log example access
+    LS-->>API: Return complete example
+    API-->>UI: Return example data
+    UI->>UI: Render interactive example
+    
+    User->>UI: Interact with example
+    UI->>API: POST /learning/web3/interact
+    API->>W3I: executeInteraction(networkId, params)
+    W3I->>BC: Submit transaction to testnet
+    BC-->>W3I: Return transaction result
+    W3I-->>API: Return interaction result
+    API-->>UI: Update UI with result
+    
+    Note over User,BC: User learns through real blockchain interaction
+</div></code></pre>
+<h3 id="2-mobile-framework-integration-flow">2. Mobile Framework Integration Flow</h3>
+<p>This sequence diagram shows how the platform integrates with mobile development frameworks.</p>
+<pre><code class="language-mermaid"><div class="mermaid">sequenceDiagram
+    actor Developer
+    participant UI as Development Interface
+    participant API as API Gateway
+    participant CS as Component Service
+    participant MFI as Mobile Framework Integration
+    participant TS as Testing Service
+    participant MF as Mobile Framework
+    
+    Developer->>UI: Create component for framework
+    UI->>API: POST /components/validate
+    API->>CS: validateComponentForFramework(component, framework)
+    CS->>MFI: checkCompatibility(component, framework)
+    MFI->>MF: validateAgainstSpecs(component)
+    MF-->>MFI: Return validation results
+    MFI-->>CS: Return compatibility status
+    CS-->>API: Return validation results
+    API-->>UI: Display validation feedback
+    
+    Developer->>UI: Request framework-specific optimizations
+    UI->>API: POST /components/optimize
+    API->>MFI: optimizeForFramework(component, framework)
+    MFI->>MFI: Apply framework best practices
+    MFI-->>API: Return optimized component
+    API-->>UI: Display optimized code
+    
+    Developer->>UI: Test component in framework
+    UI->>API: POST /components/test
+    API->>TS: testInFramework(component, framework)
+    TS->>MFI: prepareTestEnvironment(framework)
+    MFI->>MF: initializeTestRunner(framework)
+    MF-->>MFI: Return test environment
+    TS->>MF: executeTests(component, testCases)
+    MF-->>TS: Return test results
+    TS-->>API: Return detailed test report
+    API-->>UI: Display test results
+    
+    Note over Developer,MF: Component is validated against framework requirements
+</div></code></pre>
+<h3 id="3-external-repository-integration-flow">3. External Repository Integration Flow</h3>
+<p>This sequence diagram illustrates how the platform integrates with external code repositories.</p>
+<pre><code class="language-mermaid"><div class="mermaid">sequenceDiagram
+    actor User
+    participant UI as Repository Interface
+    participant API as API Gateway
+    participant CS as Component Service
+    participant RS as Repository Service
+    participant GI as Git Integration
+    participant ER as External Repository
+    
+    User->>UI: Link external repository
+    UI->>API: POST /components/import
+    API->>CS: importFromExternalRepo(repoUrl, userId)
+    CS->>GI: authenticateWithRepo(credentials)
+    GI->>ER: Authenticate
+    ER-->>GI: Return authentication status
+    
+    alt Authentication Failed
+        GI-->>CS: Return auth error
+        CS-->>API: Return import error
+        API-->>UI: Display auth failure
+    else Authentication Succeeded
+        GI->>ER: Clone repository
+        ER-->>GI: Return repository content
+        GI->>GI: Analyze repository structure
+        GI->>RS: createInternalRepository(content)
+        RS-->>GI: Return internal repo info
+        GI->>CS: processComponentMetadata(repoContent)
+        CS->>CS: Extract component information
+        CS->>CS: Validate component structure
+        CS->>RS: linkRepositories(internalId, externalUrl)
+        CS-->>API: Return import results
+        API-->>UI: Display import success
+    end
+    
+    User->>UI: Configure sync settings
+    UI->>API: POST /components/sync/configure
+    API->>CS: configureSyncSettings(componentId, settings)
+    CS->>GI: setupWebhook(externalRepo, settings)
+    GI->>ER: Register webhook
+    ER-->>GI: Confirm webhook creation
+    GI-->>CS: Return sync configuration
+    CS-->>API: Return configuration status
+    API-->>UI: Display sync configuration
+    
+    Note over User,ER: External repository changes will now sync to platform
+</div></code></pre>
+<h2 id="supporting-documentation">Supporting Documentation</h2>
+<h3 id="critical-path-analysis">Critical Path Analysis</h3>
+<p>The following paths represent the most critical sequences that require optimization for performance and reliability:</p>
+<ol>
+<li>
+<p><strong>User Authentication Flow</strong></p>
+<ul>
+<li>Critical for all user interactions</li>
+<li>Must be secure and responsive</li>
+<li>Failure impacts all platform functionality</li>
+</ul>
+</li>
+<li>
+<p><strong>AI Assistant Interaction</strong></p>
+<ul>
+<li>Core differentiator for the platform</li>
+<li>Response time directly impacts user experience</li>
+<li>High computational resource requirements</li>
+</ul>
+</li>
+<li>
+<p><strong>Component Search and Retrieval</strong></p>
+<ul>
+<li>Frequently used functionality</li>
+<li>Must scale with repository growth</li>
+<li>Search performance impacts developer productivity</li>
+</ul>
+</li>
+</ol>
+<h3 id="performance-considerations">Performance Considerations</h3>
+<ol>
+<li>
+<p><strong>AI Response Time Optimization</strong></p>
+<ul>
+<li>Implement model caching for common queries</li>
+<li>Consider edge deployment for lower latency</li>
+<li>Use progressive response for complex queries</li>
+</ul>
+</li>
+<li>
+<p><strong>Repository Scaling</strong></p>
+<ul>
+<li>Implement efficient indexing for component metadata</li>
+<li>Use CDN for component asset delivery</li>
+<li>Consider sharding for large repository growth</li>
+</ul>
+</li>
+<li>
+<p><strong>Learning Content Delivery</strong></p>
+<ul>
+<li>Cache frequently accessed educational content</li>
+<li>Optimize media delivery for various network conditions</li>
+<li>Implement progressive loading for large modules</li>
+</ul>
+</li>
+</ol>
+<h3 id="security-checkpoints">Security Checkpoints</h3>
+<ol>
+<li>
+<p><strong>Authentication and Authorization</strong></p>
+<ul>
+<li>JWT validation on all protected endpoints</li>
+<li>Role-based access control for administrative functions</li>
+<li>Rate limiting to prevent abuse</li>
+</ul>
+</li>
+<li>
+<p><strong>Component Validation</strong></p>
+<ul>
+<li>Code scanning for security vulnerabilities</li>
+<li>Sandboxed execution for component testing</li>
+<li>Versioned dependencies with security scanning</li>
+</ul>
+</li>
+<li>
+<p><strong>External Integrations</strong></p>
+<ul>
+<li>Secure credential storage for external services</li>
+<li>API key rotation policies</li>
+<li>Audit logging for all external interactions</li>
+</ul>
+</li>
+</ol>
+<h3 id="monitoring-points">Monitoring Points</h3>
+<ol>
+<li>
+<p><strong>User Experience Metrics</strong></p>
+<ul>
+<li>AI response time tracking</li>
+<li>Page load performance</li>
+<li>Error rates by feature</li>
+</ul>
+</li>
+<li>
+<p><strong>System Health</strong></p>
+<ul>
+<li>Service availability monitoring</li>
+<li>Database performance metrics</li>
+<li>API endpoint response times</li>
+</ul>
+</li>
+<li>
+<p><strong>Business Metrics</strong></p>
+<ul>
+<li>User engagement tracking</li>
+<li>Component usage statistics</li>
+<li>Learning progress analytics</li>
+</ul>
+</li>
+</ol>
+<h2 id="implementation-notes">Implementation Notes</h2>
+<h3 id="technical-dependencies">Technical Dependencies</h3>
+<ol>
+<li>
+<p><strong>AI Assistant Implementation</strong></p>
+<ul>
+<li>Requires NLP model deployment infrastructure</li>
+<li>Depends on training data pipeline</li>
+<li>Needs feedback loop mechanism</li>
+</ul>
+</li>
+<li>
+<p><strong>Web3 Integration</strong></p>
+<ul>
+<li>Requires connections to multiple blockchain networks</li>
+<li>Depends on wallet integration capabilities</li>
+<li>Needs testnet environment for examples</li>
+</ul>
+</li>
+<li>
+<p><strong>Mobile Framework Support</strong></p>
+<ul>
+<li>Requires test environments for multiple frameworks</li>
+<li>Depends on framework-specific validation rules</li>
+<li>Needs component transpilation capabilities</li>
+</ul>
+</li>
+</ol>
+<h3 id="constraints-and-limitations">Constraints and Limitations</h3>
+<ol>
+<li>
+<p><strong>AI Response Time</strong></p>
+<ul>
+<li>Complex queries may exceed target response times</li>
+<li>Model size vs. performance tradeoffs</li>
+<li>Training data quality impacts response accuracy</li>
+</ul>
+</li>
+<li>
+<p><strong>External Integration Reliability</strong></p>
+<ul>
+<li>Blockchain network availability varies</li>
+<li>External repository API rate limits</li>
+<li>Mobile framework version compatibility</li>
+</ul>
+</li>
+<li>
+<p><strong>Scalability Considerations</strong></p>
+<ul>
+<li>Component repository growth may impact search performance</li>
+<li>Concurrent AI requests may require queue management</li>
+<li>User analytics data volume requires efficient storage strategy</li>
+</ul>
+</li>
+</ol>
+<h3 id="testing-requirements">Testing Requirements</h3>
+<ol>
+<li>
+<p><strong>Integration Testing</strong></p>
+<ul>
+<li>Mock external services for reliable testing</li>
+<li>Test all error paths and recovery mechanisms</li>
+<li>Verify sequence timing under various loads</li>
+</ul>
+</li>
+<li>
+<p><strong>Performance Testing</strong></p>
+<ul>
+<li>Benchmark AI response times under load</li>
+<li>Test repository search with large dataset</li>
+<li>Measure content delivery performance</li>
+</ul>
+</li>
+<li>
+<p><strong>Security Testing</strong></p>
+<ul>
+<li>Penetration testing for authentication flows</li>
+<li>Vulnerability scanning for uploaded components</li>
+<li>Data privacy compliance verification</li>
+</ul>
+</li>
+</ol>
+
+</body>
+</html>

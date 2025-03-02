@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>06_implementation_examples_continued.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="brotea-implementation-examples-continued">Brotea: Implementation Examples (Continued)</h1>
+<p>This document continues the implementation examples for the Brotea platform, focusing on frontend implementation, database schema, and testing strategies.</p>
+<h2 id="frontend-implementation-examples">Frontend Implementation Examples</h2>
+<h3 id="1-react-component-for-learning-module">1. React Component for Learning Module</h3>
+<pre class="hljs"><code><div>// src/components/learning/LearningModuleCard.tsx
+import React from 'react';
+import { Card, CardContent, CardActions, Typography, Button, Chip, Box, LinearProgress } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
+import { LearningModule } from '../../types/learning';
+
+const StyledCard = styled(Card)(({ theme }) =&gt; ({
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  transition: 'transform 0.2s ease-in-out',
+  '&amp;:hover': {
+    transform: 'translateY(-4px)',
+    boxShadow: theme.shadows[4],
+  },
+}));
+
+const DifficultyChip = styled(Chip)&lt;{ difficulty: string }&gt;(({ theme, difficulty }) =&gt; {
+  const colors = {
+    beginner: theme.palette.success.main,
+    intermediate: theme.palette.warning.main,
+    advanced: theme.palette.error.main,
+  };
+  
+  return {
+    backgroundColor: colors[difficulty as keyof typeof colors] || theme.palette.primary.main,
+    color: theme.palette.common.white,
+    fontWeight: 'bold',
+  };
+});
+
+interface LearningModuleCardProps {
+  module: LearningModule;
+  progress?: number;
+}
+
+export const LearningModuleCard: React.FC&lt;LearningModuleCardProps&gt; = ({ module, progress = 0 }) =&gt; {
+  const navigate = useNavigate();
+  
+  const handleModuleClick = () =&gt; {
+    navigate(`/learning/modules/${module.id}`);
+  };
+  
+  return (
+    &lt;StyledCard&gt;
+      &lt;CardContent sx={{ flexGrow: 1 }}&gt;
+        &lt;Box display=&quot;flex&quot; justifyContent=&quot;space-between&quot; alignItems=&quot;center&quot; mb={2}&gt;
+          &lt;Typography variant=&quot;h5&quot; component=&quot;h2&quot; gutterBottom&gt;
+            {module.title}
+          &lt;/Typography&gt;
+          &lt;DifficultyChip
+            label={module.difficulty.charAt(0).toUpperCase() + module.difficulty.slice(1)}
+            difficulty={module.difficulty}
+            size=&quot;small&quot;
+          /&gt;
+        &lt;/Box&gt;
+        
+        &lt;Typography variant=&quot;body2&quot; color=&quot;text.secondary&quot; paragraph&gt;
+          {module.description}
+        &lt;/Typography&gt;
+        
+        &lt;Box mt={2}&gt;
+          &lt;Typography variant=&quot;body2&quot; color=&quot;text.secondary&quot;&gt;
+            {module.topics?.length || 0} topics
+          &lt;/Typography&gt;
+          
+          {progress &gt; 0 &amp;&amp; (
+            &lt;Box mt={1}&gt;
+              &lt;Typography variant=&quot;body2&quot; color=&quot;text.secondary&quot;&gt;
+                Progress: {Math.round(progress)}%
+              &lt;/Typography&gt;
+              &lt;LinearProgress 
+                variant=&quot;determinate&quot; 
+                value={progress} 
+                sx={{ mt: 0.5, height: 8, borderRadius: 4 }} 
+              /&gt;
+            &lt;/Box&gt;
+          )}
+        &lt;/Box&gt;
+      &lt;/CardContent&gt;
+      
+      &lt;CardActions&gt;
+        &lt;Button size=&quot;small&quot; color=&quot;primary&quot; onClick={handleModuleClick}&gt;
+          {progress &gt; 0 ? 'Continue Learning' : 'Start Learning'}
+        &lt;/Button&gt;
+      &lt;/CardActions&gt;
+    &lt;/StyledCard&gt;
+  );
+};
+</div></code></pre>
+<h3 id="2-react-component-for-ai-assistant-interaction">2. React Component for AI Assistant Interaction</h3>
+<pre class="hljs"><code><div>// src/components/ai/AIAssistantChat.tsx
+import React, { useState, useRef, useEffect } from 'react';
+import { 
+  Box, 
+  TextField, 
+  Button, 
+  Paper, 
+  Typography, 
+  Avatar, 
+  CircularProgress,
+  Divider,
+  IconButton,
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
+import SendIcon from '@mui/icons-material/Send';
+import CodeIcon from '@mui/icons-material/Code';
+import SmartToyIcon from '@mui/icons-material/SmartToy';
+import PersonIcon from '@mui/icons-material/Person';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { useAIAssistant } from '../../hooks/useAIAssistant';
+import { Message, MessageType } from '../../types/ai';
+import ReactMarkdown from 'react-markdown';
+
+const ChatContainer = styled(Paper)(({ theme }) =&gt; ({
+  display: 'flex',
+  flexDirection: 'column',
+  height: '600px',
+  padding: theme.spacing(2),
+  backgroundColor: theme.palette.background.default,
+}));
+
+const MessagesContainer = styled(Box)(({ theme }) =&gt; ({
+  flexGrow: 1,
+  overflow: 'auto',
+  padding: theme.spacing(2),
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(2),
+}));
+
+const MessageBubble = styled(Box)&lt;{ isUser: boolean }&gt;(({ theme, isUser }) =&gt; ({
+  display: 'flex',
+  alignItems: 'flex-start',
+  maxWidth: '80%',
+  alignSelf: isUser ? 'flex-end' : 'flex-start',
+}));
+
+const MessageContent = styled(Paper)&lt;{ isUser: boolean }&gt;(({ theme, isUser }) =&gt; ({
+  padding: theme.spacing(2),
+  borderRadius: theme.spacing(2),
+  backgroundColor: isUser ? theme.palette.primary.main : theme.palette.background.paper,
+  color: isUser ? theme.palette.primary.contrastText : theme.palette.text.primary,
+  marginLeft: isUser ? 0 : theme.spacing(1),
+  marginRight: isUser ? theme.spacing(1) : 0,
+}));
+
+const InputContainer = styled(Box)(({ theme }) =&gt; ({
+  display: 'flex',
+  padding: theme.spacing(2),
+  gap: theme.spacing(1),
+}));
+
+interface AIAssistantChatProps {
+  assistantType: 'education' | 'development';
+  initialContext?: string;
+}
+
+export const AIAssistantChat: React.FC&lt;AIAssistantChatProps&gt; = ({ 
+  assistantType, 
+  initialContext 
+}) =&gt; {
+  const [input, setInput] = useState('');
+  const messagesEndRef = useRef&lt;HTMLDivElement&gt;(null);
+  const { messages, isLoading, sendMessage } = useAIAssistant(assistantType, initialContext);
+
+  const handleSendMessage = () =&gt; {
+    if (input.trim() &amp;&amp; !isLoading) {
+      sendMessage(input);
+      setInput('');
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) =&gt; {
+    if (e.key === 'Enter' &amp;&amp; !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
+  // Auto-scroll to bottom when messages change
+  useEffect(() =&gt; {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  // Render code blocks with syntax highlighting
+  const renderMessageContent = (message: Message) =&gt; {
+    if (message.type === MessageType.USER) {
+      return &lt;Typography&gt;{message.content}&lt;/Typography&gt;;
+    }
+    
+    return (
+      &lt;ReactMarkdown
+        components={{
+          code({ node, inline, className, children, ...props }) {
+            const match = /language-(\w+)/.exec(className || '');
+            return !inline &amp;&amp; match ? (
+              &lt;SyntaxHighlighter
+                style={atomDark}
+                language={match[1]}
+                PreTag=&quot;div&quot;
+                {...props}
+              &gt;
+                {String(children).replace(/\n$/, '')}
+              &lt;/SyntaxHighlighter&gt;
+            ) : (
+              &lt;code className={className} {...props}&gt;
+                {children}
+              &lt;/code&gt;
+            );
+          }
+        }}
+      &gt;
+        {message.content}
+      &lt;/ReactMarkdown&gt;
+    );
+  };
+
+  return (
+    &lt;ChatContainer elevation={3}&gt;
+      &lt;Typography variant=&quot;h6&quot; gutterBottom&gt;
+        {assistantType === 'education' ? 'Web3 Education Assistant' : 'Mobile Development Assistant'}
+      &lt;/Typography&gt;
+      &lt;Divider /&gt;
+      
+      &lt;MessagesContainer&gt;
+        {messages.map((message, index) =&gt; (
+          &lt;MessageBubble key={index} isUser={message.type === MessageType.USER}&gt;
+            &lt;Avatar&gt;
+              {message.type === MessageType.USER ? (
+                &lt;PersonIcon /&gt;
+              ) : (
+                &lt;SmartToyIcon /&gt;
+              )}
+            &lt;/Avatar&gt;
+            &lt;MessageContent isUser={message.type === MessageType.USER}&gt;
+              {renderMessageContent(message)}
+            &lt;/MessageContent&gt;
+          &lt;/MessageBubble&gt;
+        ))}
+        
+        {isLoading &amp;&amp; (
+          &lt;MessageBubble isUser={false}&gt;
+            &lt;Avatar&gt;
+              &lt;SmartToyIcon /&gt;
+            &lt;/Avatar&gt;
+            &lt;MessageContent isUser={false}&gt;
+              &lt;Box display=&quot;flex&quot; alignItems=&quot;center&quot;&gt;
+                &lt;CircularProgress size={20} /&gt;
+                &lt;Typography ml={1}&gt;Thinking...&lt;/Typography&gt;
+              &lt;/Box&gt;
+            &lt;/MessageContent&gt;
+          &lt;/MessageBubble&gt;
+        )}
+        
+        &lt;div ref={messagesEndRef} /&gt;
+      &lt;/MessagesContainer&gt;
+      
+      &lt;InputContainer&gt;
+        &lt;TextField
+          fullWidth
+          variant=&quot;outlined&quot;
+          placeholder={`Ask the ${assistantType} assistant...`}
+          value={input}
+          onChange={(e) =&gt; setInput(e.target.value)}
+          onKeyPress={handleKeyPress}
+          multiline
+          maxRows={4}
+          disabled={isLoading}
+        /&gt;
+        &lt;IconButton 
+          color=&quot;primary&quot; 
+          onClick={handleSendMessage} 
+          disabled={isLoading || !input.trim()}
+        &gt;
+          &lt;SendIcon /&gt;
+        &lt;/IconButton&gt;
+        &lt;IconButton color=&quot;secondary&quot;&gt;
+          &lt;CodeIcon /&gt;
+        &lt;/IconButton&gt;
+      &lt;/InputContainer&gt;
+    &lt;/ChatContainer&gt;
+  );
+};
+</div></code></pre>
+<h3 id="3-react-component-for-component-repository">3. React Component for Component Repository</h3>
+<pre class="hljs"><code><div>// src/components/repository/ComponentCard.tsx
+import React from 'react';
+import { 
+  Card, 
+  CardContent, 
+  CardActions, 
+  Typography, 
+  Button, 
+  Chip, 
+  Box, 
+  Rating,
+  Stack,
+  Divider,
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
+import CodeIcon from '@mui/icons-material/Code';
+import ForkRightIcon from '@mui/icons-material/ForkRight';
+import DownloadIcon from '@mui/icons-material/Download';
+import { Component } from '../../types/component';
+import { useNavigate } from 'react-router-dom';
+
+const StyledCard = styled(Card)(({ theme }) =&gt; ({
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  transition: 'all 0.2s ease-in-out',
+  '&amp;:hover': {
+    transform: 'translateY(-4px)',
+    boxShadow: theme.shadows[4],
+  },
+}));
+
+const PlatformChip = styled(Chip)&lt;{ platform: string }&gt;(({ theme, platform }) =&gt; {
+  const colors = {
+    ios: theme.palette.info.main,
+    android: theme.palette.success.main,
+    'cross-platform': theme.palette.warning.main,
+    web: theme.palette.secondary.main,
+  };
+  
+  return {
+    backgroundColor: colors[platform as keyof typeof colors] || theme.palette.primary.main,
+    color: theme.palette.common.white,
+    fontWeight: 'bold',
+  };
+});
+
+interface ComponentCardProps {
+  component: Component;
+  onFork?: (componentId: string) =&gt; void;
+  onDownload?: (componentId: string) =&gt; void;
+}
+
+export const ComponentCard: React.FC&lt;ComponentCardProps&gt; = ({ 
+  component, 
+  onFork, 
+  onDownload 
+}) =&gt; {
+  const navigate = useNavigate();
+  
+  const handleViewDetails = () =&gt; {
+    navigate(`/repository/components/${component.id}`);
+  };
+  
+  const handleFork = (e: React.MouseEvent) =&gt; {
+    e.stopPropagation();
+    if (onFork) {
+      onFork(component.id);
+    }
+  };
+  
+  const handleDownload = (e: React.MouseEvent) =&gt; {
+    e.stopPropagation();
+    if (onDownload) {
+      onDownload(component.id);
+    }
+  };
+  
+  return (
+    &lt;StyledCard&gt;
+      &lt;CardContent sx={{ flexGrow: 1 }}&gt;
+        &lt;Box display=&quot;flex&quot; justifyContent=&quot;space-between&quot; alignItems=&quot;center&quot; mb={2}&gt;
+          &lt;Typography variant=&quot;h6&quot; component=&quot;h2&quot;&gt;
+            {component.name}
+          &lt;/Typography&gt;
+          &lt;PlatformChip
+            label={component.platform.replace('-', ' ')}
+            platform={component.platform}
+            size=&quot;small&quot;
+            icon={&lt;CodeIcon fontSize=&quot;small&quot; /&gt;}
+          /&gt;
+        &lt;/Box&gt;
+        
+        &lt;Typography variant=&quot;body2&quot; color=&quot;text.secondary&quot; paragraph&gt;
+          {component.description}
+        &lt;/Typography&gt;
+        
+        &lt;Stack direction=&quot;row&quot; spacing={1} flexWrap=&quot;wrap&quot; mb={2}&gt;
+          {component.tags.map((tag) =&gt; (
+            &lt;Chip key={tag} label={tag} size=&quot;small&quot; variant=&quot;outlined&quot; /&gt;
+          ))}
+        &lt;/Stack&gt;
+        
+        &lt;Divider sx={{ my: 1 }} /&gt;
+        
+        &lt;Box display=&quot;flex&quot; justifyContent=&quot;space-between&quot; alignItems=&quot;center&quot;&gt;
+          &lt;Box display=&quot;flex&quot; alignItems=&quot;center&quot;&gt;
+            &lt;Rating 
+              value={component.usageMetrics.avgRating} 
+              precision={0.5} 
+              size=&quot;small&quot; 
+              readOnly 
+            /&gt;
+            &lt;Typography variant=&quot;body2&quot; color=&quot;text.secondary&quot; ml={0.5}&gt;
+              ({component.usageMetrics.reviewsCount})
+            &lt;/Typography&gt;
+          &lt;/Box&gt;
+          
+          &lt;Box display=&quot;flex&quot; alignItems=&quot;center&quot; gap={1}&gt;
+            &lt;Box display=&quot;flex&quot; alignItems=&quot;center&quot;&gt;
+              &lt;ForkRightIcon fontSize=&quot;small&quot; color=&quot;action&quot; /&gt;
+              &lt;Typography variant=&quot;body2&quot; color=&quot;text.secondary&quot; ml={0.5}&gt;
+                {component.usageMetrics.forks}
+              &lt;/Typography&gt;
+            &lt;/Box&gt;
+            
+            &lt;Box display=&quot;flex&quot; alignItems=&quot;center&quot;&gt;
+              &lt;DownloadIcon fontSize=&quot;small&quot; color=&quot;action&quot; /&gt;
+              &lt;Typography variant=&quot;body2&quot; color=&quot;text.secondary&quot; ml={0.5}&gt;
+                {component.usageMetrics.downloads}
+              &lt;/Typography&gt;
+            &lt;/Box&gt;
+          &lt;/Box&gt;
+        &lt;/Box&gt;
+      &lt;/CardContent&gt;
+      
+      &lt;CardActions&gt;
+        &lt;Button size=&quot;small&quot; color=&quot;primary&quot; onClick={handleViewDetails}&gt;
+          View Details
+        &lt;/Button&gt;
+        &lt;Button size=&quot;small&quot; startIcon={&lt;ForkRightIcon /&gt;} onClick={handleFork}&gt;
+          Fork
+        &lt;/Button&gt;
+        &lt;Button size=&quot;small&quot; startIcon={&lt;DownloadIcon /&gt;} onClick={handleDownload}&gt;
+          Download
+        &lt;/Button&gt;
+      &lt;/CardActions&gt;
+    &lt;/StyledCard&gt;
+  );
+};
+</div></code></pre>
+<h3 id="4-redux-toolkit-query-api-slice">4. Redux Toolkit Query API Slice</h3>
+<pre class="hljs"><code><div><span class="hljs-comment">// src/store/api/learningApi.ts</span>
+<span class="hljs-keyword">import</span> { createApi, fetchBaseQuery } <span class="hljs-keyword">from</span> <span class="hljs-string">'@reduxjs/toolkit/query/react'</span>;
+<span class="hljs-keyword">import</span> { RootState } <span class="hljs-keyword">from</span> <span class="hljs-string">'../store'</span>;
+<span class="hljs-keyword">import</span> { 
+  LearningModule, 
+  Topic, 
+  Content, 
+  Exercise, 
+  Progress,
+  ModuleFilters,
+} <span class="hljs-keyword">from</span> <span class="hljs-string">'../../types/learning'</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> learningApi = createApi({
+  reducerPath: <span class="hljs-string">'learningApi'</span>,
+  baseQuery: fetchBaseQuery({ 
+    baseUrl: <span class="hljs-string">'/api'</span>,
+    prepareHeaders: <span class="hljs-function">(<span class="hljs-params">headers, { getState }</span>) =&gt;</span> {
+      <span class="hljs-comment">// Get token from auth state</span>
+      <span class="hljs-keyword">const</span> token = (getState() <span class="hljs-keyword">as</span> RootState).auth.token;
+      
+      <span class="hljs-comment">// Add authorization header if token exists</span>
+      <span class="hljs-keyword">if</span> (token) {
+        headers.set(<span class="hljs-string">'authorization'</span>, <span class="hljs-string">`Bearer <span class="hljs-subst">${token}</span>`</span>);
+      }
+      
+      <span class="hljs-keyword">return</span> headers;
+    },
+  }),
+  tagTypes: [<span class="hljs-string">'Module'</span>, <span class="hljs-string">'Topic'</span>, <span class="hljs-string">'Progress'</span>],
+  endpoints: <span class="hljs-function">(<span class="hljs-params">builder</span>) =&gt;</span> ({
+    <span class="hljs-comment">// Learning Modules</span>
+    getModules: builder.query&lt;LearningModule[], ModuleFilters | <span class="hljs-built_in">void</span>&gt;({
+      query: <span class="hljs-function">(<span class="hljs-params">filters</span>) =&gt;</span> ({
+        url: <span class="hljs-string">'learning-modules'</span>,
+        params: filters,
+      }),
+      providesTags: <span class="hljs-function">(<span class="hljs-params">result</span>) =&gt;</span>
+        result
+          ? [
+              ...result.map(<span class="hljs-function">(<span class="hljs-params">{ id }</span>) =&gt;</span> ({ <span class="hljs-keyword">type</span>: <span class="hljs-string">'Module'</span> <span class="hljs-keyword">as</span> <span class="hljs-keyword">const</span>, id })),
+              { <span class="hljs-keyword">type</span>: <span class="hljs-string">'Module'</span>, id: <span class="hljs-string">'LIST'</span> },
+            ]
+          : [{ <span class="hljs-keyword">type</span>: <span class="hljs-string">'Module'</span>, id: <span class="hljs-string">'LIST'</span> }],
+    }),
+    
+    getModuleById: builder.query&lt;LearningModule, <span class="hljs-built_in">string</span>&gt;({
+      query: <span class="hljs-function">(<span class="hljs-params">id</span>) =&gt;</span> <span class="hljs-string">`learning-modules/<span class="hljs-subst">${id}</span>`</span>,
+      providesTags: <span class="hljs-function">(<span class="hljs-params">result, error, id</span>) =&gt;</span> [{ <span class="hljs-keyword">type</span>: <span class="hljs-string">'Module'</span>, id }],
+    }),
+    
+    createModule: builder.mutation&lt;LearningModule, Partial&lt;LearningModule&gt;&gt;({
+      query: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-built_in">module</span></span>) =&gt;</span> ({
+        url: <span class="hljs-string">'learning-modules'</span>,
+        method: <span class="hljs-string">'POST'</span>,
+        body: <span class="hljs-keyword">module</span>,
+      }),
+      invalidatesTags: [{ <span class="hljs-keyword">type</span>: <span class="hljs-string">'Module'</span>, id: <span class="hljs-string">'LIST'</span> }],
+    }),
+    
+    updateModule: builder.mutation&lt;LearningModule, { id: <span class="hljs-built_in">string</span>; <span class="hljs-keyword">module</span>: Partial&lt;LearningModule&gt; }&gt;({
+      query: <span class="hljs-function">(<span class="hljs-params">{ id, <span class="hljs-built_in">module</span> }</span>) =&gt;</span> ({
+        url: <span class="hljs-string">`learning-modules/<span class="hljs-subst">${id}</span>`</span>,
+        method: <span class="hljs-string">'PUT'</span>,
+        body: <span class="hljs-keyword">module</span>,
+      }),
+      invalidatesTags: (result, error, { id }) =&gt; [
+        { <span class="hljs-keyword">type</span>: <span class="hljs-string">'Module'</span>, id },
+        { <span class="hljs-keyword">type</span>: <span class="hljs-string">'Module'</span>, id: <span class="hljs-string">'LIST'</span> },
+      ],
+    }),
+    
+    deleteModule: builder.mutation&lt;<span class="hljs-built_in">void</span>, <span class="hljs-built_in">string</span>&gt;({
+      query: <span class="hljs-function">(<span class="hljs-params">id</span>) =&gt;</span> ({
+        url: <span class="hljs-string">`learning-modules/<span class="hljs-subst">${id}</span>`</span>,
+        method: <span class="hljs-string">'DELETE'</span>,
+      }),
+      invalidatesTags: [{ <span class="hljs-keyword">type</span>: <span class="hljs-string">'Module'</span>, id: <span class="hljs-string">'LIST'</span> }],
+    }),
+    
+    <span class="hljs-comment">// Topics</span>
+    getTopicsByModuleId: builder.query&lt;Topic[], <span class="hljs-built_in">string</span>&gt;({
+      query: <span class="hljs-function">(<span class="hljs-params">moduleId</span>) =&gt;</span> <span class="hljs-string">`learning-modules/<span class="hljs-subst">${moduleId}</span>/topics`</span>,
+      providesTags: <span class="hljs-function">(<span class="hljs-params">result</span>) =&gt;</span>
+        result
+          ? [
+              ...result.map(<span class="hljs-function">(<span class="hljs-params">{ id }</span>) =&gt;</span> ({ <span class="hljs-keyword">type</span>: <span class="hljs-string">'Topic'</span> <span class="hljs-keyword">as</span> <span class="hljs-keyword">const</span>, id })),
+              { <span class="hljs-keyword">type</span>: <span class="hljs-string">'Topic'</span>, id: <span class="hljs-string">'LIST'</span> },
+            ]
+          : [{ <span class="hljs-keyword">type</span>: <span class="hljs-string">'Topic'</span>, id: <span class="hljs-string">'LIST'</span> }],
+    }),
+    
+    getTopicById: builder.query&lt;Topic, <span class="hljs-built_in">string</span>&gt;({
+      query: <span class="hljs-function">(<span class="hljs-params">id</span>) =&gt;</span> <span class="hljs-string">`topics/<span class="hljs-subst">${id}</span>`</span>,
+      providesTags: <span class="hljs-function">(<span class="hljs-params">result, error, id</span>) =&gt;</span> [{ <span class="hljs-keyword">type</span>: <span class="hljs-string">'Topic'</span>, id }],
+    }),
+    
+    <span class="hljs-comment">// Progress</span>
+    getUserModuleProgress: builder.query&lt;Progress, <span class="hljs-built_in">string</span>&gt;({
+      query: <span class="hljs-function">(<span class="hljs-params">moduleId</span>) =&gt;</span> <span class="hljs-string">`learning-modules/<span class="hljs-subst">${moduleId}</span>/progress`</span>,
+      providesTags: <span class="hljs-function">(<span class="hljs-params">result, error, moduleId</span>) =&gt;</span> [
+        { <span class="hljs-keyword">type</span>: <span class="hljs-string">'Progress'</span>, id: moduleId },
+      ],
+    }),
+    
+    updateProgress: builder.mutation&lt;Progress, { entityId: <span class="hljs-built_in">string</span>; entityType: <span class="hljs-built_in">string</span>; status: <span class="hljs-built_in">string</span>; score?: <span class="hljs-built_in">number</span> }&gt;({
+      query: <span class="hljs-function">(<span class="hljs-params">progressData</span>) =&gt;</span> ({
+        url: <span class="hljs-string">'progress'</span>,
+        method: <span class="hljs-string">'POST'</span>,
+        body: progressData,
+      }),
+      invalidatesTags: <span class="hljs-function">(<span class="hljs-params">result, error, { entityId, entityType }</span>) =&gt;</span> [
+        { <span class="hljs-keyword">type</span>: <span class="hljs-string">'Progress'</span>, id: entityId },
+      ],
+    }),
+  }),
+});
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> {
+  useGetModulesQuery,
+  useGetModuleByIdQuery,
+  useCreateModuleMutation,
+  useUpdateModuleMutation,
+  useDeleteModuleMutation,
+  useGetTopicsByModuleIdQuery,
+  useGetTopicByIdQuery,
+  useGetUserModuleProgressQuery,
+  useUpdateProgressMutation,
+} = learningApi;
+</div></code></pre>
+<h2 id="database-schema-implementation">Database Schema Implementation</h2>
+<h3 id="1-postgresql-migration-for-user-tables">1. PostgreSQL Migration for User Tables</h3>
+<pre class="hljs"><code><div><span class="hljs-comment">-- migrations/001_create_user_tables.sql</span>
+
+<span class="hljs-comment">-- Users Table</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> <span class="hljs-keyword">users</span> (
+  <span class="hljs-keyword">id</span> <span class="hljs-keyword">UUID</span> PRIMARY <span class="hljs-keyword">KEY</span> <span class="hljs-keyword">DEFAULT</span> gen_random_uuid(),
+  email <span class="hljs-built_in">VARCHAR</span>(<span class="hljs-number">255</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> <span class="hljs-keyword">UNIQUE</span>,
+  display_name <span class="hljs-built_in">VARCHAR</span>(<span class="hljs-number">255</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span>,
+  password_hash <span class="hljs-built_in">VARCHAR</span>(<span class="hljs-number">255</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span>,
+  <span class="hljs-keyword">role</span> <span class="hljs-built_in">VARCHAR</span>(<span class="hljs-number">20</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-string">'user'</span>,
+  is_active <span class="hljs-built_in">BOOLEAN</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-literal">TRUE</span>,
+  created_at <span class="hljs-built_in">TIMESTAMP</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NOW</span>(),
+  updated_at <span class="hljs-built_in">TIMESTAMP</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NOW</span>()
+);
+
+<span class="hljs-comment">-- Create index on email for faster lookups</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">INDEX</span> idx_users_email <span class="hljs-keyword">ON</span> <span class="hljs-keyword">users</span>(email);
+
+<span class="hljs-comment">-- Profiles Table</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> <span class="hljs-keyword">profiles</span> (
+  <span class="hljs-keyword">id</span> <span class="hljs-keyword">UUID</span> PRIMARY <span class="hljs-keyword">KEY</span> <span class="hljs-keyword">DEFAULT</span> gen_random_uuid(),
+  user_id <span class="hljs-keyword">UUID</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> <span class="hljs-keyword">REFERENCES</span> <span class="hljs-keyword">users</span>(<span class="hljs-keyword">id</span>) <span class="hljs-keyword">ON</span> <span class="hljs-keyword">DELETE</span> <span class="hljs-keyword">CASCADE</span>,
+  bio <span class="hljs-built_in">TEXT</span>,
+  experience_level <span class="hljs-built_in">VARCHAR</span>(<span class="hljs-number">20</span>) <span class="hljs-keyword">DEFAULT</span> <span class="hljs-string">'beginner'</span>,
+  preferences JSONB <span class="hljs-keyword">DEFAULT</span> <span class="hljs-string">'{}'</span>,
+  updated_at <span class="hljs-built_in">TIMESTAMP</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NOW</span>()
+);
+
+<span class="hljs-comment">-- Create unique index on user_id to ensure one profile per user</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">UNIQUE</span> <span class="hljs-keyword">INDEX</span> idx_profiles_user_id <span class="hljs-keyword">ON</span> <span class="hljs-keyword">profiles</span>(user_id);
+
+<span class="hljs-comment">-- User Skills Table</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> user_skills (
+  <span class="hljs-keyword">id</span> <span class="hljs-keyword">UUID</span> PRIMARY <span class="hljs-keyword">KEY</span> <span class="hljs-keyword">DEFAULT</span> gen_random_uuid(),
+  user_id <span class="hljs-keyword">UUID</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> <span class="hljs-keyword">REFERENCES</span> <span class="hljs-keyword">users</span>(<span class="hljs-keyword">id</span>) <span class="hljs-keyword">ON</span> <span class="hljs-keyword">DELETE</span> <span class="hljs-keyword">CASCADE</span>,
+  skill_name <span class="hljs-built_in">VARCHAR</span>(<span class="hljs-number">100</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span>,
+  proficiency_level <span class="hljs-built_in">INTEGER</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-number">1</span>,
+  added_at <span class="hljs-built_in">TIMESTAMP</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NOW</span>()
+);
+
+<span class="hljs-comment">-- Create index on user_id for faster lookups</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">INDEX</span> idx_user_skills_user_id <span class="hljs-keyword">ON</span> user_skills(user_id);
+<span class="hljs-comment">-- Create unique index on user_id and skill_name to prevent duplicates</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">UNIQUE</span> <span class="hljs-keyword">INDEX</span> idx_user_skills_unique <span class="hljs-keyword">ON</span> user_skills(user_id, skill_name);
+
+<span class="hljs-comment">-- Function to update the updated_at timestamp</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">OR</span> <span class="hljs-keyword">REPLACE</span> <span class="hljs-keyword">FUNCTION</span> update_updated_at_column()
+<span class="hljs-keyword">RETURNS</span> <span class="hljs-keyword">TRIGGER</span> <span class="hljs-keyword">AS</span> $$
+<span class="hljs-keyword">BEGIN</span>
+   NEW.updated_at = <span class="hljs-keyword">NOW</span>();
+   RETURN NEW;
+<span class="hljs-keyword">END</span>;
+$$ LANGUAGE plpgsql;
+
+<span class="hljs-comment">-- Trigger for users table</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TRIGGER</span> update_users_updated_at
+<span class="hljs-keyword">BEFORE</span> <span class="hljs-keyword">UPDATE</span> <span class="hljs-keyword">ON</span> <span class="hljs-keyword">users</span>
+<span class="hljs-keyword">FOR</span> <span class="hljs-keyword">EACH</span> <span class="hljs-keyword">ROW</span>
+<span class="hljs-keyword">EXECUTE</span> <span class="hljs-keyword">FUNCTION</span> update_updated_at_column();
+
+<span class="hljs-comment">-- Trigger for profiles table</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TRIGGER</span> update_profiles_updated_at
+<span class="hljs-keyword">BEFORE</span> <span class="hljs-keyword">UPDATE</span> <span class="hljs-keyword">ON</span> <span class="hljs-keyword">profiles</span>
+<span class="hljs-keyword">FOR</span> <span class="hljs-keyword">EACH</span> <span class="hljs-keyword">ROW</span>
+<span class="hljs-keyword">EXECUTE</span> <span class="hljs-keyword">FUNCTION</span> update_updated_at_column();
+</div></code></pre>
+<h3 id="2-postgresql-migration-for-learning-module-tables">2. PostgreSQL Migration for Learning Module Tables</h3>
+<pre class="hljs"><code><div><span class="hljs-comment">-- migrations/002_create_learning_module_tables.sql</span>
+
+<span class="hljs-comment">-- Learning Modules Table</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> learning_modules (
+  <span class="hljs-keyword">id</span> <span class="hljs-keyword">UUID</span> PRIMARY <span class="hljs-keyword">KEY</span> <span class="hljs-keyword">DEFAULT</span> gen_random_uuid(),
+  title <span class="hljs-built_in">VARCHAR</span>(<span class="hljs-number">255</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span>,
+  description <span class="hljs-built_in">TEXT</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span>,
+  difficulty_level <span class="hljs-built_in">VARCHAR</span>(<span class="hljs-number">20</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-string">'beginner'</span>,
+  metadata JSONB <span class="hljs-keyword">DEFAULT</span> <span class="hljs-string">'{}'</span>,
+  created_at <span class="hljs-built_in">TIMESTAMP</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NOW</span>(),
+  updated_at <span class="hljs-built_in">TIMESTAMP</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NOW</span>()
+);
+
+<span class="hljs-comment">-- Topics Table</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> topics (
+  <span class="hljs-keyword">id</span> <span class="hljs-keyword">UUID</span> PRIMARY <span class="hljs-keyword">KEY</span> <span class="hljs-keyword">DEFAULT</span> gen_random_uuid(),
+  module_id <span class="hljs-keyword">UUID</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> <span class="hljs-keyword">REFERENCES</span> learning_modules(<span class="hljs-keyword">id</span>) <span class="hljs-keyword">ON</span> <span class="hljs-keyword">DELETE</span> <span class="hljs-keyword">CASCADE</span>,
+  title <span class="hljs-built_in">VARCHAR</span>(<span class="hljs-number">255</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span>,
+  sequence_order <span class="hljs-built_in">INTEGER</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span>,
+  created_at <span class="hljs-built_in">TIMESTAMP</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NOW</span>(),
+  updated_at <span class="hljs-built_in">TIMESTAMP</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NOW</span>()
+);
+
+<span class="hljs-comment">-- Create index on module_id for faster lookups</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">INDEX</span> idx_topics_module_id <span class="hljs-keyword">ON</span> topics(module_id);
+<span class="hljs-comment">-- Create index on sequence_order for ordered retrieval</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">INDEX</span> idx_topics_sequence <span class="hljs-keyword">ON</span> topics(module_id, sequence_order);
+
+<span class="hljs-comment">-- Content Table</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> <span class="hljs-keyword">content</span> (
+  <span class="hljs-keyword">id</span> <span class="hljs-keyword">UUID</span> PRIMARY <span class="hljs-keyword">KEY</span> <span class="hljs-keyword">DEFAULT</span> gen_random_uuid(),
+  topic_id <span class="hljs-keyword">UUID</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> <span class="hljs-keyword">REFERENCES</span> topics(<span class="hljs-keyword">id</span>) <span class="hljs-keyword">ON</span> <span class="hljs-keyword">DELETE</span> <span class="hljs-keyword">CASCADE</span>,
+  content_type <span class="hljs-built_in">VARCHAR</span>(<span class="hljs-number">50</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span>,
+  <span class="hljs-keyword">data</span> JSONB <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span>,
+  metadata JSONB <span class="hljs-keyword">DEFAULT</span> <span class="hljs-string">'{}'</span>,
+  sequence_order <span class="hljs-built_in">INTEGER</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span>,
+  created_at <span class="hljs-built_in">TIMESTAMP</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NOW</span>(),
+  updated_at <span class="hljs-built_in">TIMESTAMP</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NOW</span>()
+);
+
+<span class="hljs-comment">-- Create index on topic_id for faster lookups</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">INDEX</span> idx_content_topic_id <span class="hljs-keyword">ON</span> <span class="hljs-keyword">content</span>(topic_id);
+<span class="hljs-comment">-- Create index on sequence_order for ordered retrieval</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">INDEX</span> idx_content_sequence <span class="hljs-keyword">ON</span> <span class="hljs-keyword">content</span>(topic_id, sequence_order);
+
+<span class="hljs-comment">-- Exercises Table</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> exercises (
+  <span class="hljs-keyword">id</span> <span class="hljs-keyword">UUID</span> PRIMARY <span class="hljs-keyword">KEY</span> <span class="hljs-keyword">DEFAULT</span> gen_random_uuid(),
+  topic_id <span class="hljs-keyword">UUID</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> <span class="hljs-keyword">REFERENCES</span> topics(<span class="hljs-keyword">id</span>) <span class="hljs-keyword">ON</span> <span class="hljs-keyword">DELETE</span> <span class="hljs-keyword">CASCADE</span>,
+  instructions <span class="hljs-built_in">TEXT</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span>,
+  solution_template <span class="hljs-built_in">TEXT</span>,
+  validation_criteria JSONB <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span>,
+  difficulty_level <span class="hljs-built_in">VARCHAR</span>(<span class="hljs-number">20</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-string">'beginner'</span>,
+  sequence_order <span class="hljs-built_in">INTEGER</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span>,
+  created_at <span class="hljs-built_in">TIMESTAMP</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NOW</span>(),
+  updated_at <span class="hljs-built_in">TIMESTAMP</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NOW</span>()
+);
+
+<span class="hljs-comment">-- Create index on topic_id for faster lookups</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">INDEX</span> idx_exercises_topic_id <span class="hljs-keyword">ON</span> exercises(topic_id);
+<span class="hljs-comment">-- Create index on sequence_order for ordered retrieval</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">INDEX</span> idx_exercises_sequence <span class="hljs-keyword">ON</span> exercises(topic_id, sequence_order);
+
+<span class="hljs-comment">-- Module Prerequisites Table</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> module_prerequisites (
+  <span class="hljs-keyword">id</span> <span class="hljs-keyword">UUID</span> PRIMARY <span class="hljs-keyword">KEY</span> <span class="hljs-keyword">DEFAULT</span> gen_random_uuid(),
+  module_id <span class="hljs-keyword">UUID</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> <span class="hljs-keyword">REFERENCES</span> learning_modules(<span class="hljs-keyword">id</span>) <span class="hljs-keyword">ON</span> <span class="hljs-keyword">DELETE</span> <span class="hljs-keyword">CASCADE</span>,
+  prerequisite_id <span class="hljs-keyword">UUID</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> <span class="hljs-keyword">REFERENCES</span> learning_modules(<span class="hljs-keyword">id</span>) <span class="hljs-keyword">ON</span> <span class="hljs-keyword">DELETE</span> <span class="hljs-keyword">CASCADE</span>,
+  <span class="hljs-keyword">CONSTRAINT</span> unique_prerequisite <span class="hljs-keyword">UNIQUE</span> (module_id, prerequisite_id)
+);
+
+<span class="hljs-comment">-- Create index on module_id for faster lookups</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">INDEX</span> idx_module_prerequisites_module_id <span class="hljs-keyword">ON</span> module_prerequisites(module_id);
+
+<span class="hljs-comment">-- Progress Table</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> user_progress (
+  <span class="hljs-keyword">id</span> <span class="hljs-keyword">UUID</span> PRIMARY <span class="hljs-keyword">KEY</span> <span class="hljs-keyword">DEFAULT</span> gen_random_uuid(),
+  user_id <span class="hljs-keyword">UUID</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> <span class="hljs-keyword">REFERENCES</span> <span class="hljs-keyword">users</span>(<span class="hljs-keyword">id</span>) <span class="hljs-keyword">ON</span> <span class="hljs-keyword">DELETE</span> <span class="hljs-keyword">CASCADE</span>,
+  entity_id <span class="hljs-keyword">UUID</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span>,
+  entity_type <span class="hljs-built_in">VARCHAR</span>(<span class="hljs-number">50</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span>,
+  completion_status <span class="hljs-built_in">VARCHAR</span>(<span class="hljs-number">20</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-string">'not_started'</span>,
+  score <span class="hljs-built_in">INTEGER</span>,
+  last_accessed <span class="hljs-built_in">TIMESTAMP</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NOW</span>(),
+  notes <span class="hljs-built_in">TEXT</span>,
+  <span class="hljs-keyword">CONSTRAINT</span> unique_user_entity <span class="hljs-keyword">UNIQUE</span> (user_id, entity_id, entity_type)
+);
+
+<span class="hljs-comment">-- Create index on user_id for faster lookups</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">INDEX</span> idx_user_progress_user_id <span class="hljs-keyword">ON</span> user_progress(user_id);
+<span class="hljs-comment">-- Create index on entity_id for faster lookups</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">INDEX</span> idx_user_progress_entity_id <span class="hljs-keyword">ON</span> user_progress(entity_id);
+<span class="hljs-comment">-- Create composite index for common queries</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">INDEX</span> idx_user_progress_composite <span class="hljs-keyword">ON</span> user_progress(user_id, entity_type, completion_status);
+
+<span class="hljs-comment">-- Triggers for updated_at columns</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TRIGGER</span> update_learning_modules_updated_at
+<span class="hljs-keyword">BEFORE</span> <span class="hljs-keyword">UPDATE</span> <span class="hljs-keyword">ON</span> learning_modules
+<span class="hljs-keyword">FOR</span> <span class="hljs-keyword">EACH</span> <span class="hljs-keyword">ROW</span>
+<span class="hljs-keyword">EXECUTE</span> <span class="hljs-keyword">FUNCTION</span> update_updated_at_column();
+
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TRIGGER</span> update_topics_updated_at
+<span class="hljs-keyword">BEFORE</span> <span class="hljs-keyword">UPDATE</span> <span class="hljs-keyword">ON</span> topics
+<span class="hljs-keyword">FOR</span> <span class="hljs-keyword">EACH</span> <span class="hljs-keyword">ROW</span>
+<span class="hljs-keyword">EXECUTE</span> <span class="hljs-keyword">FUNCTION</span> update_updated_at_column();
+
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TRIGGER</span> update_content_updated_at
+<span class="hljs-keyword">BEFORE</span> <span class="hljs-keyword">UPDATE</span> <span class="hljs-keyword">ON</span> <span class="hljs-keyword">content</span>
+<span class="hljs-keyword">FOR</span> <span class="hljs-keyword">EACH</span> <span class="hljs-keyword">ROW</span>
+<span class="hljs-keyword">EXECUTE</span> <span class="hljs-keyword">FUNCTION</span> update_updated_at_column();
+
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TRIGGER</span> update_exercises_updated_at
+<span class="hljs-keyword">BEFORE</span> <span class="hljs-keyword">UPDATE</span> <span class="hljs-keyword">ON</span> exercises
+<span class="hljs-keyword">FOR</span> <span class="hljs-keyword">EACH</span> <span class="hljs-keyword">ROW</span>
+<span class="hljs-keyword">EXECUTE</span> <span class="hljs-keyword">FUNCTION</span> update_updated_at_column();
+</div></code></pre>
+<h2 id="testing-strategy-implementation">Testing Strategy Implementation</h2>
+<h3 id="1-unit-test-for-user-service">1. Unit Test for User Service</h3>
+<pre class="hljs"><code><div><span class="hljs-comment">// src/application/services/__tests__/user.service.spec.ts</span>
+<span class="hljs-keyword">import</span> { Test, TestingModule } <span class="hljs-keyword">from</span> <span class="hljs-string">'@nestjs/testing'</span>;
+<span class="hljs-keyword">import</span> { JwtService } <span class="hljs-keyword">from</span> <span class="hljs-string">'@nestjs/jwt'</span>;
+<span class="hljs-keyword">import</span> { EventEmitter2 } <span class="hljs-keyword">from</span> <span class="hljs-string">'@nestjs/event-emitter'</span>;
+<span class="hljs-keyword">import</span> { ConflictException, NotFoundException, UnauthorizedException } <span class="hljs-keyword">from</span> <span class="hljs-string">'@nestjs/common'</span>;
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> bcrypt <span class="hljs-keyword">from</span> <span class="hljs-string">'bcrypt'</span>;
+<span class="hljs-keyword">import</span> { UserService } <span class="hljs-keyword">from</span> <span class="hljs-string">'../user.service'</span>;
+<span class="hljs-keyword">import</span> { UserRepository } <span class="hljs-keyword">from</span> <span class="hljs-string">'../../../infrastructure/repositories/user.repository'</span>;
+<span class="hljs-keyword">import</span> { CreateUserDto } <span class="hljs-keyword">from</span> <span class="hljs-string">'../../dtos/user/create-user.dto'</span>;
+<span class="hljs-keyword">import</span> { LoginDto } <span class="hljs-keyword">from</span> <span class="hljs-string">'../../dtos/auth/login.dto'</span>;
+<span class="hljs-keyword">import</span> { User, UserRole } <span class="hljs-keyword">from</span> <span class="hljs-string">'../../../domain/entities/user.entity'</span>;
+
+<span class="hljs-comment">// Mock bcrypt</span>
+jest.mock(<span class="hljs-string">'bcrypt'</span>);
+
+describe(<span class="hljs-string">'UserService'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  <span class="hljs-keyword">let</span> service: UserService;
+  <span class="hljs-keyword">let</span> userRepository: UserRepository;
+  <span class="hljs-keyword">let</span> jwtService: JwtService;
+  <span class="hljs-keyword">let</span> eventEmitter: EventEmitter2;
+
+  <span class="hljs-keyword">const</span> mockUser: User = {
+    id: <span class="hljs-string">'123'</span>,
+    email: <span class="hljs-string">'test@example.com'</span>,
+    displayName: <span class="hljs-string">'Test User'</span>,
+    passwordHash: <span class="hljs-string">'hashedpassword'</span>,
+    role: UserRole.USER,
+    isActive: <span class="hljs-literal">true</span>,
+    createdAt: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(),
+    updatedAt: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(),
+    profileInfo: {
+      bio: <span class="hljs-string">''</span>,
+      skills: [],
+      experience: <span class="hljs-string">'beginner'</span>,
+      preferences: {},
+    },
+    createdComponents: [],
+    learningProgress: [],
+  };
+
+  beforeEach(<span class="hljs-keyword">async</span> () =&gt; {
+    <span class="hljs-keyword">const</span> <span class="hljs-keyword">module</span>: TestingModule = await Test.createTestingModule({
+      providers: [
+        UserService,
+        {
+          provide: UserRepository,
+          useValue: {
+            findAll: jest.fn(),
+            findById: jest.fn(),
+            findByEmail: jest.fn(),
+            create: jest.fn(),
+            update: jest.fn(),
+            <span class="hljs-keyword">delete</span>: jest.fn(),
+            getUserWithProgress: jest.fn(),
+          },
+        },
+        {
+          provide: JwtService,
+          useValue: {
+            sign: jest.fn(),
+          },
+        },
+        {
+          provide: EventEmitter2,
+          useValue: {
+            emit: jest.fn(),
+          },
+        },
+      ],
+    }).compile();
+
+    service = <span class="hljs-built_in">module</span>.<span class="hljs-keyword">get</span>&lt;UserService&gt;(UserService);
+    userRepository = <span class="hljs-built_in">module</span>.<span class="hljs-keyword">get</span>&lt;UserRepository&gt;(UserRepository);
+    jwtService = <span class="hljs-built_in">module</span>.<span class="hljs-keyword">get</span>&lt;JwtService&gt;(JwtService);
+    eventEmitter = <span class="hljs-built_in">module</span>.<span class="hljs-keyword">get</span>&lt;EventEmitter2&gt;(EventEmitter2);
+  });
+
+  it(<span class="hljs-string">'should be defined'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+    expect(service).toBeDefined();
+  });
+
+  describe(<span class="hljs-string">'findById'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+    it(<span class="hljs-string">'should return a user if found'</span>, <span class="hljs-keyword">async</span> () =&gt; {
+      jest.spyOn(userRepository, <span class="hljs-string">'findById'</span>).mockResolvedValue(mockUser);
+      
+      <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> service.findById(<span class="hljs-string">'123'</span>);
+      
+      expect(result).toEqual(mockUser);
+      expect(userRepository.findById).toHaveBeenCalledWith(<span class="hljs-string">'123'</span>);
+    });
+
+    it(<span class="hljs-string">'should throw NotFoundException if user not found'</span>, <span class="hljs-keyword">async</span> () =&gt; {
+      jest.spyOn(userRepository, <span class="hljs-string">'findById'</span>).mockResolvedValue(<span class="hljs-literal">null</span>);
+      
+      <span class="hljs-keyword">await</span> expect(service.findById(<span class="hljs-string">'123'</span>)).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe(<span class="hljs-string">'register'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+    <span class="hljs-keyword">const</span> createUserDto: CreateUserDto = {
+      email: <span class="hljs-string">'test@example.com'</span>,
+      password: <span class="hljs-string">'password123'</span>,
+      displayName: <span class="hljs-string">'Test User'</span>,
+    };
+
+    it(<span class="hljs-string">'should create a new user successfully'</span>, <span class="hljs-keyword">async</span> () =&gt; {
+      jest.spyOn(userRepository, <span class="hljs-string">'findByEmail'</span>).mockResolvedValue(<span class="hljs-literal">null</span>);
+      jest.spyOn(bcrypt, <span class="hljs-string">'hash'</span>).mockResolvedValue(<span class="hljs-string">'hashedpassword'</span> <span class="hljs-keyword">as</span> never);
+      jest.spyOn(userRepository, <span class="hljs-string">'create'</span>).mockResolvedValue(mockUser);
+      jest.spyOn(eventEmitter, <span class="hljs-string">'emit'</span>);
+      
+      <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> service.register(createUserDto);
+      
+      expect(result).toEqual(mockUser);
+      expect(userRepository.findByEmail).toHaveBeenCalledWith(createUserDto.email);
+      expect(bcrypt.hash).toHaveBeenCalledWith(createUserDto.password, <span class="hljs-number">10</span>);
+      expect(userRepository.create).toHaveBeenCalledWith(expect.objectContaining({
+        email: createUserDto.email,
+        displayName: createUserDto.displayName,
+        passwordHash: <span class="hljs-string">'hashedpassword'</span>,
+      }));
+      expect(eventEmitter.emit).toHaveBeenCalledWith(
+        <span class="hljs-string">'user.registered'</span>,
+        expect.any(<span class="hljs-built_in">Object</span>),
+      );
+    });
+
+    it(<span class="hljs-string">'should throw ConflictException if user already exists'</span>,
+</div></code></pre>
+
+</body>
+</html>

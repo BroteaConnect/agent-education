@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>04_model_and_service_definition.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="brotea-model-and-service-definition">Brotea: Model and Service Definition</h1>
+<h2 id="domain-model-overview">Domain Model Overview</h2>
+<p>The Brotea platform is designed around several key bounded contexts that reflect the core capabilities of the system. This document outlines the domain models, service architecture, and implementation guidelines following Domain-Driven Design principles and SOLID patterns.</p>
+<h2 id="domain-model-diagram">Domain Model Diagram</h2>
+<pre><code class="language-mermaid"><div class="mermaid">classDiagram
+    class User {
+        +userId: UUID
+        +email: String
+        +displayName: String
+        +profileInfo: ProfileInfo
+        +learningProgress: Map~String, Progress~
+        +createdComponents: Component[]
+        +register()
+        +updateProfile()
+        +trackProgress()
+    }
+    
+    class ProfileInfo {
+        +bio: String
+        +skills: String[]
+        +experience: ExperienceLevel
+        +preferences: UserPreferences
+    }
+    
+    class LearningModule {
+        +moduleId: UUID
+        +title: String
+        +description: String
+        +topics: Topic[]
+        +prerequisites: LearningModule[]
+        +difficulty: DifficultyLevel
+        +createTopic()
+        +updateModule()
+        +calculateCompletionRate()
+    }
+    
+    class Topic {
+        +topicId: UUID
+        +title: String
+        +content: Content[]
+        +exercises: Exercise[]
+        +addContent()
+        +addExercise()
+        +calculateProgress()
+    }
+    
+    class Content {
+        +contentId: UUID
+        +type: ContentType
+        +data: Object
+        +metadata: ContentMetadata
+        +render()
+        +update()
+    }
+    
+    class Exercise {
+        +exerciseId: UUID
+        +instructions: String
+        +solutionTemplate: String
+        +validationCriteria: ValidationCriteria[]
+        +difficulty: DifficultyLevel
+        +validate()
+        +provideFeedback()
+    }
+    
+    class Progress {
+        +userId: UUID
+        +entityId: UUID
+        +completionStatus: CompletionStatus
+        +lastAccessed: DateTime
+        +score: Number
+        +notes: String
+        +updateStatus()
+        +recordActivity()
+    }
+    
+    class Component {
+        +componentId: UUID
+        +name: String
+        +description: String
+        +version: String
+        +creator: User
+        +platform: PlatformType
+        +framework: FrameworkType
+        +sourceCode: SourceCode
+        +dependencies: Dependency[]
+        +tags: String[]
+        +usageMetrics: UsageMetrics
+        +publish()
+        +update()
+        +fork()
+        +trackUsage()
+    }
+    
+    class SourceCode {
+        +repository: String
+        +branch: String
+        +files: CodeFile[]
+        +mainFile: String
+        +buildInstructions: String
+        +clone()
+        +build()
+        +validate()
+    }
+    
+    class AIAssistant {
+        +assistantId: UUID
+        +type: AssistantType
+        +capabilities: Capability[]
+        +trainingData: TrainingData
+        +performanceMetrics: Metrics
+        +generateResponse()
+        +learnFromInteraction()
+        +evaluatePerformance()
+    }
+    
+    class Interaction {
+        +interactionId: UUID
+        +user: User
+        +assistant: AIAssistant
+        +context: InteractionContext
+        +messages: Message[]
+        +feedback: Feedback
+        +startInteraction()
+        +addMessage()
+        +provideFeedback()
+        +analyzeInteraction()
+    }
+    
+    User "1" -- "*" Progress: tracks
+    User "1" -- "*" Component: creates
+    User "1" -- "*" Interaction: participates in
+    LearningModule "1" -- "*" Topic: contains
+    Topic "1" -- "*" Content: includes
+    Topic "1" -- "*" Exercise: offers
+    Component "1" -- "1" SourceCode: has
+    AIAssistant "1" -- "*" Interaction: participates in
+    LearningModule "*" -- "*" Progress: tracked through
+    Component "*" -- "*" Progress: tracked through
+</div></code></pre>
+<h2 id="bounded-contexts">Bounded Contexts</h2>
+<h3 id="1-user-management-context">1. User Management Context</h3>
+<p><strong>Core Entities</strong>: User, ProfileInfo, Authentication
+<strong>Value Objects</strong>: UserPreferences, ExperienceLevel
+<strong>Aggregates</strong>: User (root)
+<strong>Domain Events</strong>: UserRegistered, ProfileUpdated, SkillsUpdated</p>
+<h3 id="2-learning-context">2. Learning Context</h3>
+<p><strong>Core Entities</strong>: LearningModule, Topic, Content, Exercise
+<strong>Value Objects</strong>: DifficultyLevel, ContentMetadata, ValidationCriteria
+<strong>Aggregates</strong>: LearningModule (root), Topic
+<strong>Domain Events</strong>: ModuleCompleted, ExerciseSubmitted, ContentViewed</p>
+<h3 id="3-progress-tracking-context">3. Progress Tracking Context</h3>
+<p><strong>Core Entities</strong>: Progress
+<strong>Value Objects</strong>: CompletionStatus, Score
+<strong>Aggregates</strong>: Progress (root)
+<strong>Domain Events</strong>: ProgressUpdated, AchievementUnlocked, MilestoneReached</p>
+<h3 id="4-component-repository-context">4. Component Repository Context</h3>
+<p><strong>Core Entities</strong>: Component, SourceCode, Dependency
+<strong>Value Objects</strong>: Version, PlatformType, FrameworkType, UsageMetrics
+<strong>Aggregates</strong>: Component (root)
+<strong>Domain Events</strong>: ComponentPublished, ComponentForked, ComponentUpdated</p>
+<h3 id="5-ai-assistant-context">5. AI Assistant Context</h3>
+<p><strong>Core Entities</strong>: AIAssistant, Interaction, Message
+<strong>Value Objects</strong>: AssistantType, Capability, InteractionContext, Feedback
+<strong>Aggregates</strong>: AIAssistant (root), Interaction
+<strong>Domain Events</strong>: InteractionStarted, ResponseGenerated, FeedbackProvided</p>
+<h2 id="context-map">Context Map</h2>
+<pre><code class="language-mermaid"><div class="mermaid">graph TD
+    A[User Management Context] -->|provides identity to| B[Learning Context]
+    A -->|provides identity to| C[Component Repository Context]
+    A -->|provides identity to| D[AI Assistant Context]
+    B -->|tracks through| E[Progress Tracking Context]
+    C -->|tracks through| E
+    B -->|enhances with| D
+    C -->|enhances with| D
+    
+    subgraph "Core Domain"
+        D
+        C
+    end
+    
+    subgraph "Supporting Domain"
+        B
+        E
+    end
+    
+    subgraph "Generic Domain"
+        A
+    end
+</div></code></pre>
+<h2 id="service-architecture">Service Architecture</h2>
+<h3 id="application-services">Application Services</h3>
+<pre><code class="language-mermaid"><div class="mermaid">graph TD
+    subgraph "API Layer"
+        API[API Gateway]
+        Auth[Authentication Service]
+        UserAPI[User API]
+        LearningAPI[Learning API]
+        ComponentAPI[Component API]
+        AIAPI[AI Assistant API]
+    end
+    
+    subgraph "Application Services"
+        UserService[User Service]
+        LearningService[Learning Service]
+        ProgressService[Progress Service]
+        ComponentService[Component Service]
+        AIService[AI Assistant Service]
+        AnalyticsService[Analytics Service]
+    end
+    
+    subgraph "Domain Services"
+        AuthDomain[Authentication Domain]
+        UserDomain[User Domain]
+        LearningDomain[Learning Domain]
+        ProgressDomain[Progress Domain]
+        ComponentDomain[Component Domain]
+        AIDomain[AI Assistant Domain]
+    end
+    
+    subgraph "Infrastructure Services"
+        Storage[Storage Service]
+        Search[Search Service]
+        Notification[Notification Service]
+        Integration[External Integration Service]
+        Cache[Cache Service]
+        EventBus[Event Bus]
+    end
+    
+    API --> Auth
+    API --> UserAPI
+    API --> LearningAPI
+    API --> ComponentAPI
+    API --> AIAPI
+    
+    UserAPI --> UserService
+    LearningAPI --> LearningService
+    ComponentAPI --> ComponentService
+    AIAPI --> AIService
+    
+    UserService --> UserDomain
+    UserService --> ProgressService
+    LearningService --> LearningDomain
+    LearningService --> ProgressService
+    ComponentService --> ComponentDomain
+    ComponentService --> ProgressService
+    AIService --> AIDomain
+    
+    UserDomain --> Storage
+    UserDomain --> EventBus
+    LearningDomain --> Storage
+    LearningDomain --> Search
+    LearningDomain --> EventBus
+    ProgressDomain --> Storage
+    ProgressDomain --> EventBus
+    ComponentDomain --> Storage
+    ComponentDomain --> Search
+    ComponentDomain --> Integration
+    ComponentDomain --> EventBus
+    AIDomain --> Integration
+    AIDomain --> Cache
+    AIDomain --> EventBus
+    
+    ProgressService --> ProgressDomain
+    ProgressService --> AnalyticsService
+    AnalyticsService --> Storage
+</div></code></pre>
+<h2 id="data-model">Data Model</h2>
+<h3 id="user-management-schema">User Management Schema</h3>
+<pre><code class="language-mermaid"><div class="mermaid">erDiagram
+    USERS {
+        uuid user_id PK
+        string email
+        string hashed_password
+        string display_name
+        timestamp created_at
+        timestamp updated_at
+        boolean is_active
+    }
+    
+    PROFILES {
+        uuid profile_id PK
+        uuid user_id FK
+        string bio
+        json preferences
+        enum experience_level
+        timestamp updated_at
+    }
+    
+    USER_SKILLS {
+        uuid user_skill_id PK
+        uuid user_id FK
+        string skill_name
+        int proficiency_level
+        timestamp added_at
+    }
+    
+    USERS ||--o| PROFILES : has
+    USERS ||--o{ USER_SKILLS : has
+</div></code></pre>
+<h3 id="learning-context-schema">Learning Context Schema</h3>
+<pre><code class="language-mermaid"><div class="mermaid">erDiagram
+    LEARNING_MODULES {
+        uuid module_id PK
+        string title
+        string description
+        enum difficulty_level
+        json metadata
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    TOPICS {
+        uuid topic_id PK
+        uuid module_id FK
+        string title
+        int sequence_order
+        timestamp created_at
+    }
+    
+    CONTENT {
+        uuid content_id PK
+        uuid topic_id FK
+        enum content_type
+        json data
+        json metadata
+        int sequence_order
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    EXERCISES {
+        uuid exercise_id PK
+        uuid topic_id FK
+        string instructions
+        string solution_template
+        json validation_criteria
+        enum difficulty_level
+        int sequence_order
+        timestamp created_at
+    }
+    
+    MODULE_PREREQUISITES {
+        uuid prerequisite_id PK
+        uuid module_id FK
+        uuid prerequisite_module_id FK
+    }
+    
+    LEARNING_MODULES ||--o{ MODULE_PREREQUISITES : has
+    LEARNING_MODULES ||--o{ TOPICS : contains
+    TOPICS ||--o{ CONTENT : includes
+    TOPICS ||--o{ EXERCISES : offers
+</div></code></pre>
+<h3 id="progress-tracking-schema">Progress Tracking Schema</h3>
+<pre><code class="language-mermaid"><div class="mermaid">erDiagram
+    USER_PROGRESS {
+        uuid progress_id PK
+        uuid user_id FK
+        uuid entity_id
+        string entity_type
+        enum completion_status
+        int score
+        timestamp last_accessed
+        string notes
+    }
+    
+    ACHIEVEMENTS {
+        uuid achievement_id PK
+        string name
+        string description
+        string criteria
+        string badge_image
+    }
+    
+    USER_ACHIEVEMENTS {
+        uuid user_achievement_id PK
+        uuid user_id FK
+        uuid achievement_id FK
+        timestamp earned_at
+    }
+    
+    USER_PROGRESS ||--o{ USER_ACHIEVEMENTS : leads to
+    ACHIEVEMENTS ||--o{ USER_ACHIEVEMENTS : earned as
+</div></code></pre>
+<h3 id="component-repository-schema">Component Repository Schema</h3>
+<pre><code class="language-mermaid"><div class="mermaid">erDiagram
+    COMPONENTS {
+        uuid component_id PK
+        string name
+        string description
+        string version
+        uuid creator_id FK
+        enum platform_type
+        enum framework_type
+        json metadata
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    SOURCE_CODE {
+        uuid source_id PK
+        uuid component_id FK
+        string repository_url
+        string branch
+        string main_file
+        string build_instructions
+    }
+    
+    CODE_FILES {
+        uuid file_id PK
+        uuid source_id FK
+        string file_path
+        string file_content
+        timestamp updated_at
+    }
+    
+    DEPENDENCIES {
+        uuid dependency_id PK
+        uuid component_id FK
+        string name
+        string version
+        boolean is_dev_dependency
+    }
+    
+    COMPONENT_TAGS {
+        uuid tag_id PK
+        uuid component_id FK
+        string tag_name
+    }
+    
+    USAGE_METRICS {
+        uuid metric_id PK
+        uuid component_id FK
+        int downloads
+        int forks
+        float avg_rating
+        int reviews_count
+        timestamp last_updated
+    }
+    
+    COMPONENTS ||--|| SOURCE_CODE : has
+    SOURCE_CODE ||--o{ CODE_FILES : contains
+    COMPONENTS ||--o{ DEPENDENCIES : requires
+    COMPONENTS ||--o{ COMPONENT_TAGS : tagged with
+    COMPONENTS ||--|| USAGE_METRICS : tracks
+</div></code></pre>
+<h3 id="ai-assistant-schema">AI Assistant Schema</h3>
+<pre><code class="language-mermaid"><div class="mermaid">erDiagram
+    AI_ASSISTANTS {
+        uuid assistant_id PK
+        enum assistant_type
+        json capabilities
+        json training_config
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    INTERACTIONS {
+        uuid interaction_id PK
+        uuid user_id FK
+        uuid assistant_id FK
+        json context
+        timestamp started_at
+        timestamp ended_at
+    }
+    
+    MESSAGES {
+        uuid message_id PK
+        uuid interaction_id FK
+        enum sender_type
+        text content
+        timestamp sent_at
+        json metadata
+    }
+    
+    FEEDBACK {
+        uuid feedback_id PK
+        uuid interaction_id FK
+        int rating
+        text comments
+        json improvement_areas
+        timestamp provided_at
+    }
+    
+    PERFORMANCE_METRICS {
+        uuid metric_id PK
+        uuid assistant_id FK
+        float response_accuracy
+        float response_time
+        int successful_interactions
+        timestamp measured_at
+    }
+    
+    AI_ASSISTANTS ||--o{ INTERACTIONS : participates in
+    AI_ASSISTANTS ||--o{ PERFORMANCE_METRICS : measured by
+    INTERACTIONS ||--o{ MESSAGES : contains
+    INTERACTIONS ||--o| FEEDBACK : receives
+</div></code></pre>
+<h2 id="service-interfaces">Service Interfaces</h2>
+<h3 id="user-service-interface">User Service Interface</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">interface</span> UserService {
+  <span class="hljs-comment">// User management</span>
+  registerUser(email: <span class="hljs-built_in">string</span>, password: <span class="hljs-built_in">string</span>, displayName: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;User&gt;;
+  authenticateUser(email: <span class="hljs-built_in">string</span>, password: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;AuthToken&gt;;
+  getUserProfile(userId: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;UserProfile&gt;;
+  updateUserProfile(userId: <span class="hljs-built_in">string</span>, profileData: Partial&lt;UserProfile&gt;): <span class="hljs-built_in">Promise</span>&lt;UserProfile&gt;;
+  
+  <span class="hljs-comment">// Skills management</span>
+  addUserSkill(userId: <span class="hljs-built_in">string</span>, skill: Skill): <span class="hljs-built_in">Promise</span>&lt;<span class="hljs-built_in">void</span>&gt;;
+  removeUserSkill(userId: <span class="hljs-built_in">string</span>, skillId: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;<span class="hljs-built_in">void</span>&gt;;
+  getUserSkills(userId: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;Skill[]&gt;;
+  
+  <span class="hljs-comment">// User preferences</span>
+  getUserPreferences(userId: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;UserPreferences&gt;;
+  updateUserPreferences(userId: <span class="hljs-built_in">string</span>, preferences: Partial&lt;UserPreferences&gt;): <span class="hljs-built_in">Promise</span>&lt;UserPreferences&gt;;
+}
+</div></code></pre>
+<h3 id="learning-service-interface">Learning Service Interface</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">interface</span> LearningService {
+  <span class="hljs-comment">// Module management</span>
+  getModules(filters?: ModuleFilters): <span class="hljs-built_in">Promise</span>&lt;LearningModule[]&gt;;
+  getModuleById(moduleId: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;LearningModule&gt;;
+  createModule(moduleData: ModuleCreationData): <span class="hljs-built_in">Promise</span>&lt;LearningModule&gt;;
+  updateModule(moduleId: <span class="hljs-built_in">string</span>, moduleData: Partial&lt;ModuleUpdateData&gt;): <span class="hljs-built_in">Promise</span>&lt;LearningModule&gt;;
+  
+  <span class="hljs-comment">// Topic management</span>
+  getTopicsByModuleId(moduleId: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;Topic[]&gt;;
+  getTopicById(topicId: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;Topic&gt;;
+  createTopic(moduleId: <span class="hljs-built_in">string</span>, topicData: TopicCreationData): <span class="hljs-built_in">Promise</span>&lt;Topic&gt;;
+  updateTopic(topicId: <span class="hljs-built_in">string</span>, topicData: Partial&lt;TopicUpdateData&gt;): <span class="hljs-built_in">Promise</span>&lt;Topic&gt;;
+  
+  <span class="hljs-comment">// Content management</span>
+  getContentByTopicId(topicId: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;Content[]&gt;;
+  createContent(topicId: <span class="hljs-built_in">string</span>, contentData: ContentCreationData): <span class="hljs-built_in">Promise</span>&lt;Content&gt;;
+  updateContent(contentId: <span class="hljs-built_in">string</span>, contentData: Partial&lt;ContentUpdateData&gt;): <span class="hljs-built_in">Promise</span>&lt;Content&gt;;
+  
+  <span class="hljs-comment">// Exercise management</span>
+  getExercisesByTopicId(topicId: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;Exercise[]&gt;;
+  createExercise(topicId: <span class="hljs-built_in">string</span>, exerciseData: ExerciseCreationData): <span class="hljs-built_in">Promise</span>&lt;Exercise&gt;;
+  updateExercise(exerciseId: <span class="hljs-built_in">string</span>, exerciseData: Partial&lt;ExerciseUpdateData&gt;): <span class="hljs-built_in">Promise</span>&lt;Exercise&gt;;
+  validateExerciseSolution(exerciseId: <span class="hljs-built_in">string</span>, solution: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;ValidationResult&gt;;
+}
+</div></code></pre>
+<h3 id="component-service-interface">Component Service Interface</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">interface</span> ComponentService {
+  <span class="hljs-comment">// Component management</span>
+  getComponents(filters?: ComponentFilters): <span class="hljs-built_in">Promise</span>&lt;Component[]&gt;;
+  getComponentById(componentId: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;Component&gt;;
+  createComponent(componentData: ComponentCreationData): <span class="hljs-built_in">Promise</span>&lt;Component&gt;;
+  updateComponent(componentId: <span class="hljs-built_in">string</span>, componentData: Partial&lt;ComponentUpdateData&gt;): <span class="hljs-built_in">Promise</span>&lt;Component&gt;;
+  
+  <span class="hljs-comment">// Source code management</span>
+  getSourceCode(componentId: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;SourceCode&gt;;
+  updateSourceCode(componentId: <span class="hljs-built_in">string</span>, sourceData: Partial&lt;SourceCodeUpdateData&gt;): <span class="hljs-built_in">Promise</span>&lt;SourceCode&gt;;
+  
+  <span class="hljs-comment">// Component operations</span>
+  forkComponent(componentId: <span class="hljs-built_in">string</span>, userId: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;Component&gt;;
+  publishComponent(componentId: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;PublishResult&gt;;
+  validateComponent(componentId: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;ValidationResult&gt;;
+  
+  <span class="hljs-comment">// Component metrics</span>
+  getComponentMetrics(componentId: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;UsageMetrics&gt;;
+  rateComponent(componentId: <span class="hljs-built_in">string</span>, userId: <span class="hljs-built_in">string</span>, rating: <span class="hljs-built_in">number</span>, review?: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;<span class="hljs-built_in">void</span>&gt;;
+  
+  <span class="hljs-comment">// Search and discovery</span>
+  searchComponents(query: <span class="hljs-built_in">string</span>, filters?: ComponentFilters): <span class="hljs-built_in">Promise</span>&lt;SearchResults&lt;Component&gt;&gt;;
+  getRecommendedComponents(userId: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;Component[]&gt;;
+}
+</div></code></pre>
+<h3 id="ai-assistant-service-interface">AI Assistant Service Interface</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">interface</span> AIAssistantService {
+  <span class="hljs-comment">// Assistant management</span>
+  getAssistants(<span class="hljs-keyword">type</span>?: AssistantType): <span class="hljs-built_in">Promise</span>&lt;AIAssistant[]&gt;;
+  getAssistantById(assistantId: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;AIAssistant&gt;;
+  
+  <span class="hljs-comment">// Interaction management</span>
+  startInteraction(userId: <span class="hljs-built_in">string</span>, assistantId: <span class="hljs-built_in">string</span>, context?: InteractionContext): <span class="hljs-built_in">Promise</span>&lt;Interaction&gt;;
+  sendMessage(interactionId: <span class="hljs-built_in">string</span>, content: <span class="hljs-built_in">string</span>, metadata?: <span class="hljs-built_in">any</span>): <span class="hljs-built_in">Promise</span>&lt;Message&gt;;
+  getInteractionHistory(interactionId: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;Message[]&gt;;
+  endInteraction(interactionId: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;<span class="hljs-built_in">void</span>&gt;;
+  
+  <span class="hljs-comment">// Feedback management</span>
+  provideFeedback(interactionId: <span class="hljs-built_in">string</span>, feedback: Feedback): <span class="hljs-built_in">Promise</span>&lt;<span class="hljs-built_in">void</span>&gt;;
+  getAssistantPerformance(assistantId: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;PerformanceMetrics&gt;;
+  
+  <span class="hljs-comment">// Educational assistance</span>
+  explainConcept(concept: <span class="hljs-built_in">string</span>, userLevel: ExperienceLevel): <span class="hljs-built_in">Promise</span>&lt;Explanation&gt;;
+  generateExample(concept: <span class="hljs-built_in">string</span>, context?: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;Example&gt;;
+  
+  <span class="hljs-comment">// Development assistance</span>
+  suggestImplementation(requirements: <span class="hljs-built_in">string</span>, platform: PlatformType, framework?: FrameworkType): <span class="hljs-built_in">Promise</span>&lt;Implementation&gt;;
+  reviewCode(code: <span class="hljs-built_in">string</span>, criteria?: ReviewCriteria): <span class="hljs-built_in">Promise</span>&lt;CodeReview&gt;;
+  debugIssue(code: <span class="hljs-built_in">string</span>, errorDescription: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;DebugSolution&gt;;
+}
+</div></code></pre>
+<h3 id="progress-service-interface">Progress Service Interface</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">interface</span> ProgressService {
+  <span class="hljs-comment">// Progress tracking</span>
+  getUserProgress(userId: <span class="hljs-built_in">string</span>, entityType?: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;Progress[]&gt;;
+  getEntityProgress(entityId: <span class="hljs-built_in">string</span>, entityType: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;Progress[]&gt;;
+  updateProgress(userId: <span class="hljs-built_in">string</span>, entityId: <span class="hljs-built_in">string</span>, entityType: <span class="hljs-built_in">string</span>, status: CompletionStatus, score?: <span class="hljs-built_in">number</span>): <span class="hljs-built_in">Promise</span>&lt;Progress&gt;;
+  
+  <span class="hljs-comment">// Achievement management</span>
+  getUserAchievements(userId: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;Achievement[]&gt;;
+  checkAchievements(userId: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;Achievement[]&gt;;
+  
+  <span class="hljs-comment">// Analytics</span>
+  getUserLearningStats(userId: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;LearningStats&gt;;
+  getModuleCompletionStats(moduleId: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;CompletionStats&gt;;
+  getComponentUsageStats(componentId: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">Promise</span>&lt;UsageStats&gt;;
+}
+</div></code></pre>
+<h2 id="implementation-guidelines">Implementation Guidelines</h2>
+<h3 id="coding-standards">Coding Standards</h3>
+<ol>
+<li>
+<p><strong>Naming Conventions</strong></p>
+<ul>
+<li>Use descriptive, domain-specific names for classes, methods, and variables</li>
+<li>Follow language-specific conventions (camelCase for JavaScript/TypeScript, snake_case for database)</li>
+<li>Prefix interfaces with 'I' in languages that support it</li>
+</ul>
+</li>
+<li>
+<p><strong>Code Organization</strong></p>
+<ul>
+<li>Organize code by bounded context, then by layer</li>
+<li>Keep domain logic separate from infrastructure concerns</li>
+<li>Use feature folders for related functionality</li>
+</ul>
+</li>
+<li>
+<p><strong>Documentation</strong></p>
+<ul>
+<li>Document all public APIs with JSDoc or similar</li>
+<li>Include purpose, parameters, return values, and exceptions</li>
+<li>Document domain concepts in a central glossary</li>
+</ul>
+</li>
+</ol>
+<h3 id="pattern-usage">Pattern Usage</h3>
+<ol>
+<li>
+<p><strong>Repository Pattern</strong></p>
+<ul>
+<li>Use repositories to abstract data access</li>
+<li>Implement repository interfaces for each aggregate</li>
+<li>Keep query logic in repositories, not in domain entities</li>
+</ul>
+</li>
+<li>
+<p><strong>Factory Pattern</strong></p>
+<ul>
+<li>Use factories to create complex domain objects</li>
+<li>Ensure all invariants are satisfied during creation</li>
+<li>Implement static factory methods for common creation scenarios</li>
+</ul>
+</li>
+<li>
+<p><strong>Strategy Pattern</strong></p>
+<ul>
+<li>Use for varying algorithms (e.g., validation strategies, recommendation algorithms)</li>
+<li>Implement strategy interfaces for each variation</li>
+<li>Allow runtime strategy selection where appropriate</li>
+</ul>
+</li>
+<li>
+<p><strong>Observer Pattern</strong></p>
+<ul>
+<li>Use for domain events and notifications</li>
+<li>Implement via event bus for loose coupling</li>
+<li>Ensure proper error handling in observers</li>
+</ul>
+</li>
+</ol>
+<h3 id="error-handling">Error Handling</h3>
+<ol>
+<li>
+<p><strong>Domain Exceptions</strong></p>
+<ul>
+<li>Create specific exception types for domain rule violations</li>
+<li>Include contextual information in exceptions</li>
+<li>Document expected exceptions in method contracts</li>
+</ul>
+</li>
+<li>
+<p><strong>Validation</strong></p>
+<ul>
+<li>Validate inputs at system boundaries</li>
+<li>Use domain validation for business rules</li>
+<li>Return comprehensive validation results</li>
+</ul>
+</li>
+<li>
+<p><strong>Error Responses</strong></p>
+<ul>
+<li>Use consistent error response format across APIs</li>
+<li>Include error codes, messages, and troubleshooting info</li>
+<li>Log detailed error information for debugging</li>
+</ul>
+</li>
+</ol>
+<h3 id="logging-requirements">Logging Requirements</h3>
+<ol>
+<li>
+<p><strong>Log Levels</strong></p>
+<ul>
+<li>ERROR: Unexpected errors that require attention</li>
+<li>WARN: Potential issues that don't prevent operation</li>
+<li>INFO: Significant system events</li>
+<li>DEBUG: Detailed information for troubleshooting</li>
+</ul>
+</li>
+<li>
+<p><strong>Log Content</strong></p>
+<ul>
+<li>Include timestamp, context, and correlation ID</li>
+<li>Log structured data where possible</li>
+<li>Avoid logging sensitive information</li>
+</ul>
+</li>
+<li>
+<p><strong>Monitoring Integration</strong></p>
+<ul>
+<li>Integrate logs with monitoring system</li>
+<li>Set up alerts for critical errors</li>
+<li>Implement health checks for all services</li>
+</ul>
+</li>
+</ol>
+<h3 id="performance-criteria">Performance Criteria</h3>
+<ol>
+<li>
+<p><strong>Response Times</strong></p>
+<ul>
+<li>API endpoints: &lt; 200ms for 95% of requests</li>
+<li>AI responses: &lt; 2s for simple queries, &lt; 5s for complex</li>
+<li>Search operations: &lt; 500ms for typical queries</li>
+</ul>
+</li>
+<li>
+<p><strong>Throughput</strong></p>
+<ul>
+<li>Support 100+ concurrent users initially</li>
+<li>Scale to 1000+ concurrent users in production</li>
+<li>Handle 100+ requests per second per service</li>
+</ul>
+</li>
+<li>
+<p><strong>Resource Usage</strong></p>
+<ul>
+<li>Optimize memory usage for AI models</li>
+<li>Implement efficient caching strategies</li>
+<li>Monitor and optimize database query performance</li>
+</ul>
+</li>
+</ol>
+<h2 id="validation-checklist">Validation Checklist</h2>
+<h3 id="domain-correctness">Domain Correctness</h3>
+<ul>
+<li><input type="checkbox" id="checkbox0"><label for="checkbox0">All business entities and relationships are accurately modeled</label></li>
+<li><input type="checkbox" id="checkbox1"><label for="checkbox1">Business rules are explicitly captured in the domain model</label></li>
+<li><input type="checkbox" id="checkbox2"><label for="checkbox2">Ubiquitous language is consistent across all documentation</label></li>
+<li><input type="checkbox" id="checkbox3"><label for="checkbox3">Bounded contexts are properly identified and separated</label></li>
+</ul>
+<h3 id="technical-feasibility">Technical Feasibility</h3>
+<ul>
+<li><input type="checkbox" id="checkbox4"><label for="checkbox4">Architecture supports the required scalability</label></li>
+<li><input type="checkbox" id="checkbox5"><label for="checkbox5">Performance goals are achievable with the chosen design</label></li>
+<li><input type="checkbox" id="checkbox6"><label for="checkbox6">Security requirements can be met with the proposed approach</label></li>
+<li><input type="checkbox" id="checkbox7"><label for="checkbox7">Integration points are clearly defined and manageable</label></li>
+</ul>
+<h3 id="implementation-clarity">Implementation Clarity</h3>
+<ul>
+<li><input type="checkbox" id="checkbox8"><label for="checkbox8">Responsibilities are clearly assigned to specific components</label></li>
+<li><input type="checkbox" id="checkbox9"><label for="checkbox9">Interfaces are well-defined and cohesive</label></li>
+<li><input type="checkbox" id="checkbox10"><label for="checkbox10">Dependencies are managed according to SOLID principles</label></li>
+<li><input type="checkbox" id="checkbox11"><label for="checkbox11">Error handling and logging strategies are comprehensive</label></li>
+</ul>
+
+</body>
+</html>

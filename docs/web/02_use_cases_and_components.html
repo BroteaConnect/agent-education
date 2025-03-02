@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>02_use_cases_and_components.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="brotea-use-cases-and-component-analysis">Brotea: Use Cases and Component Analysis</h1>
+<h2 id="actor-analysis">Actor Analysis</h2>
+<h3 id="primary-actors">Primary Actors</h3>
+<ul>
+<li><strong>Beginner Developer</strong>: Users with minimal Web3/mobile development experience seeking to learn</li>
+<li><strong>Intermediate Developer</strong>: Users with some experience looking to enhance skills or reuse components</li>
+<li><strong>Educator</strong>: Users who create or curate educational content for the platform</li>
+<li><strong>Component Creator</strong>: Users who develop and share reusable components</li>
+<li><strong>Community Contributor</strong>: Users who improve documentation, provide feedback, or enhance existing components</li>
+</ul>
+<h3 id="secondary-actors">Secondary Actors</h3>
+<ul>
+<li><strong>Educational Institution</strong>: Organizations that might adopt the platform for teaching</li>
+<li><strong>Development Team</strong>: Groups using the platform for collaborative development</li>
+<li><strong>Open Source Community</strong>: External contributors and users of the shared components</li>
+</ul>
+<h3 id="system-actors">System Actors</h3>
+<ul>
+<li><strong>Web3 Education Agent</strong>: AI system that provides educational guidance on Web3 concepts</li>
+<li><strong>Mobile Development Agent</strong>: AI system that assists with mobile component creation</li>
+<li><strong>Component Repository Manager</strong>: System that catalogs, versions, and manages components</li>
+<li><strong>Learning Progress Tracker</strong>: System that monitors and reports on user learning progress</li>
+<li><strong>Integration Service</strong>: System that handles connections with external platforms and frameworks</li>
+</ul>
+<h2 id="use-case-diagrams">Use Case Diagrams</h2>
+<pre><code class="language-mermaid"><div class="mermaid">graph TD
+    subgraph "Brotea Platform"
+        subgraph "Learning Module"
+            UC1[UC1: Access Web3 Educational Content]
+            UC2[UC2: Complete Interactive Tutorials]
+            UC3[UC3: Track Learning Progress]
+        end
+        
+        subgraph "Development Module"
+            UC4[UC4: Create Mobile Components]
+            UC5[UC5: Get AI Development Assistance]
+            UC6[UC6: Test Components]
+        end
+        
+        subgraph "Component Repository"
+            UC7[UC7: Search for Components]
+            UC8[UC8: Share Created Components]
+            UC9[UC9: Fork and Modify Components]
+        end
+        
+        subgraph "Community Module"
+            UC10[UC10: Contribute to Documentation]
+            UC11[UC11: Provide Feedback on Components]
+            UC12[UC12: Participate in Community Discussions]
+        end
+    end
+    
+    BeginnerDev[Beginner Developer] --> UC1
+    BeginnerDev --> UC2
+    BeginnerDev --> UC3
+    BeginnerDev --> UC5
+    
+    IntermediateDev[Intermediate Developer] --> UC4
+    IntermediateDev --> UC5
+    IntermediateDev --> UC6
+    IntermediateDev --> UC7
+    IntermediateDev --> UC8
+    IntermediateDev --> UC9
+    
+    Educator[Educator] --> UC1
+    Educator --> UC2
+    Educator --> UC10
+    Educator --> UC12
+    
+    ComponentCreator[Component Creator] --> UC4
+    ComponentCreator --> UC6
+    ComponentCreator --> UC8
+    ComponentCreator --> UC10
+    
+    Contributor[Community Contributor] --> UC9
+    Contributor --> UC10
+    Contributor --> UC11
+    Contributor --> UC12
+    
+    Web3Agent[Web3 Education Agent] --> UC1
+    Web3Agent --> UC2
+    
+    MobileAgent[Mobile Development Agent] --> UC4
+    MobileAgent --> UC5
+    MobileAgent --> UC6
+    
+    RepoManager[Component Repository Manager] --> UC7
+    RepoManager --> UC8
+    RepoManager --> UC9
+</div></code></pre>
+<h2 id="use-case-specifications">Use Case Specifications</h2>
+<h3 id="uc1-access-web3-educational-content">UC1: Access Web3 Educational Content</h3>
+<ul>
+<li><strong>Description</strong>: Users access structured educational content about Web3 technologies</li>
+<li><strong>Actors</strong>: Beginner Developer, Intermediate Developer, Educator, Web3 Education Agent</li>
+<li><strong>Preconditions</strong>: User is authenticated on the platform</li>
+<li><strong>Main Flow</strong>:
+<ol>
+<li>User navigates to the learning section</li>
+<li>User selects a Web3 topic of interest</li>
+<li>System presents educational content with AI-enhanced explanations</li>
+<li>User consumes content through text, interactive examples, and visualizations</li>
+<li>System tracks progress and comprehension</li>
+</ol>
+</li>
+<li><strong>Alternative Flows</strong>:
+<ul>
+<li>User can request simplified explanations if content is too complex</li>
+<li>User can request advanced details if they want to dive deeper</li>
+</ul>
+</li>
+<li><strong>Postconditions</strong>: User's learning progress is updated; system recommends next topics</li>
+</ul>
+<h3 id="uc4-create-mobile-components">UC4: Create Mobile Components</h3>
+<ul>
+<li><strong>Description</strong>: Users create reusable mobile components with AI assistance</li>
+<li><strong>Actors</strong>: Intermediate Developer, Component Creator, Mobile Development Agent</li>
+<li><strong>Preconditions</strong>: User is authenticated and has basic development environment setup</li>
+<li><strong>Main Flow</strong>:
+<ol>
+<li>User initiates component creation process</li>
+<li>System presents component templates and options</li>
+<li>User selects desired functionality and design parameters</li>
+<li>Mobile Development Agent provides guidance and suggestions</li>
+<li>User iteratively develops the component with AI assistance</li>
+<li>System validates component against best practices</li>
+</ol>
+</li>
+<li><strong>Alternative Flows</strong>:
+<ul>
+<li>User can import existing code to enhance</li>
+<li>User can request AI to generate boilerplate code</li>
+</ul>
+</li>
+<li><strong>Postconditions</strong>: New component is created and ready for testing</li>
+</ul>
+<h3 id="uc7-search-for-components">UC7: Search for Components</h3>
+<ul>
+<li><strong>Description</strong>: Users search for existing components to reuse in their projects</li>
+<li><strong>Actors</strong>: Beginner Developer, Intermediate Developer, Component Repository Manager</li>
+<li><strong>Preconditions</strong>: Component repository is accessible</li>
+<li><strong>Main Flow</strong>:
+<ol>
+<li>User navigates to component repository</li>
+<li>User enters search criteria (functionality, platform, etc.)</li>
+<li>System returns matching components with ratings and usage metrics</li>
+<li>User reviews component details and documentation</li>
+<li>User selects component for use in their project</li>
+</ol>
+</li>
+<li><strong>Alternative Flows</strong>:
+<ul>
+<li>User can filter results by various criteria</li>
+<li>User can compare multiple components side by side</li>
+</ul>
+</li>
+<li><strong>Postconditions</strong>: User has selected a component for reuse</li>
+</ul>
+<h2 id="component-diagram">Component Diagram</h2>
+<pre><code class="language-mermaid"><div class="mermaid">graph TD
+    subgraph "Frontend Components"
+        UI[User Interface Layer]
+        LearningUI[Learning Interface]
+        DevToolsUI[Development Tools Interface]
+        RepoUI[Repository Browser Interface]
+        CommunityUI[Community Interface]
+        
+        UI --> LearningUI
+        UI --> DevToolsUI
+        UI --> RepoUI
+        UI --> CommunityUI
+    end
+    
+    subgraph "Backend Services"
+        API[API Gateway]
+        Auth[Authentication Service]
+        LearningService[Learning Content Service]
+        AIEducationService[AI Education Service]
+        AIDevelopmentService[AI Development Service]
+        ComponentService[Component Management Service]
+        AnalyticsService[Analytics Service]
+        
+        API --> Auth
+        API --> LearningService
+        API --> AIEducationService
+        API --> AIDevelopmentService
+        API --> ComponentService
+        API --> AnalyticsService
+    end
+    
+    subgraph "Data Stores"
+        UserDB[User Database]
+        ContentDB[Educational Content Database]
+        ComponentDB[Component Repository Database]
+        AnalyticsDB[Analytics Database]
+        
+        Auth --> UserDB
+        LearningService --> ContentDB
+        ComponentService --> ComponentDB
+        AnalyticsService --> AnalyticsDB
+    end
+    
+    subgraph "External Integrations"
+        Web3Platforms[Web3 Platforms]
+        MobileFrameworks[Mobile Development Frameworks]
+        GitIntegration[Git Repository Integration]
+        
+        ComponentService --> GitIntegration
+        AIEducationService --> Web3Platforms
+        AIDevelopmentService --> MobileFrameworks
+    end
+    
+    LearningUI --> API
+    DevToolsUI --> API
+    RepoUI --> API
+    CommunityUI --> API
+</div></code></pre>
+<h2 id="context-diagram">Context Diagram</h2>
+<pre><code class="language-mermaid"><div class="mermaid">graph TD
+    subgraph "Brotea Platform"
+        Core[Core Platform]
+    end
+    
+    User[User] <--> Core
+    
+    Core <--> Web3[Web3 Networks/Platforms]
+    Core <--> MobileFW[Mobile Frameworks]
+    Core <--> GitRepos[Git Repositories]
+    Core <--> AIServices[AI Services/Models]
+    Core <--> CloudInfra[Cloud Infrastructure]
+    
+    subgraph "User Systems"
+        DevEnv[Development Environment]
+        Browser[Web Browser]
+        MobileDevice[Mobile Device]
+    end
+    
+    User --> DevEnv
+    User --> Browser
+    User --> MobileDevice
+    
+    DevEnv <--> Core
+    Browser <--> Core
+    MobileDevice <--> Core
+</div></code></pre>
+<h2 id="component-documentation">Component Documentation</h2>
+<h3 id="ai-education-service">AI Education Service</h3>
+<ul>
+<li><strong>Responsibilities</strong>:
+<ul>
+<li>Provide intelligent explanations of Web3 concepts</li>
+<li>Adapt educational content to user's learning level</li>
+<li>Generate interactive examples and visualizations</li>
+<li>Answer user questions about Web3 technologies</li>
+</ul>
+</li>
+<li><strong>Interfaces</strong>:
+<ul>
+<li>REST API for content retrieval and interaction</li>
+<li>WebSocket for real-time assistance</li>
+</ul>
+</li>
+<li><strong>Data Models</strong>:
+<ul>
+<li>Educational content schema</li>
+<li>User comprehension model</li>
+<li>Question-answer pairs</li>
+</ul>
+</li>
+<li><strong>Security Considerations</strong>:
+<ul>
+<li>Content validation to prevent misinformation</li>
+<li>Rate limiting to prevent abuse</li>
+</ul>
+</li>
+<li><strong>Performance Requirements</strong>:
+<ul>
+<li>Response time &lt; 2 seconds for standard queries</li>
+<li>Support for concurrent users</li>
+</ul>
+</li>
+</ul>
+<h3 id="component-management-service">Component Management Service</h3>
+<ul>
+<li><strong>Responsibilities</strong>:
+<ul>
+<li>Store and retrieve component metadata and code</li>
+<li>Version control and dependency management</li>
+<li>Component validation and testing</li>
+<li>Usage analytics and ratings</li>
+</ul>
+</li>
+<li><strong>Interfaces</strong>:
+<ul>
+<li>REST API for component CRUD operations</li>
+<li>GraphQL for complex component queries</li>
+</ul>
+</li>
+<li><strong>Data Models</strong>:
+<ul>
+<li>Component metadata schema</li>
+<li>Version control model</li>
+<li>Dependency graph</li>
+</ul>
+</li>
+<li><strong>Security Considerations</strong>:
+<ul>
+<li>Code scanning for vulnerabilities</li>
+<li>Access control for private components</li>
+</ul>
+</li>
+<li><strong>Performance Requirements</strong>:
+<ul>
+<li>Fast search and retrieval (&lt; 1 second)</li>
+<li>Support for large component repositories</li>
+</ul>
+</li>
+</ul>
+<h2 id="technical-constraints">Technical Constraints</h2>
+<h3 id="technology-stack-requirements">Technology Stack Requirements</h3>
+<ul>
+<li><strong>Frontend</strong>:
+<ul>
+<li>Modern JavaScript framework (React/Vue/Angular)</li>
+<li>Mobile-responsive design</li>
+<li>WebAssembly support for interactive examples</li>
+</ul>
+</li>
+<li><strong>Backend</strong>:
+<ul>
+<li>Scalable microservices architecture</li>
+<li>Support for real-time communication</li>
+<li>AI/ML integration capabilities</li>
+</ul>
+</li>
+<li><strong>Data Storage</strong>:
+<ul>
+<li>Relational database for user and structured data</li>
+<li>Document database for educational content</li>
+<li>Object storage for component code and assets</li>
+</ul>
+</li>
+</ul>
+<h3 id="infrastructure-needs">Infrastructure Needs</h3>
+<ul>
+<li><strong>Compute</strong>:
+<ul>
+<li>Scalable cloud infrastructure</li>
+<li>GPU support for AI model inference</li>
+<li>Edge computing for low-latency interactions</li>
+</ul>
+</li>
+<li><strong>Networking</strong>:
+<ul>
+<li>Global CDN for content delivery</li>
+<li>WebSocket support for real-time features</li>
+<li>API gateway with rate limiting and caching</li>
+</ul>
+</li>
+</ul>
+<h3 id="integration-requirements">Integration Requirements</h3>
+<ul>
+<li><strong>Web3 Platforms</strong>:
+<ul>
+<li>APIs for major blockchain networks</li>
+<li>Smart contract interaction capabilities</li>
+<li>Wallet integration support</li>
+</ul>
+</li>
+<li><strong>Mobile Frameworks</strong>:
+<ul>
+<li>Integration with React Native, Flutter, etc.</li>
+<li>Native module bridging capabilities</li>
+<li>Testing frameworks for mobile components</li>
+</ul>
+</li>
+</ul>
+<h3 id="security-protocols">Security Protocols</h3>
+<ul>
+<li><strong>Authentication</strong>:
+<ul>
+<li>OAuth 2.0 / OpenID Connect</li>
+<li>Multi-factor authentication option</li>
+<li>JWT for API authorization</li>
+</ul>
+</li>
+<li><strong>Data Protection</strong>:
+<ul>
+<li>End-to-end encryption for sensitive data</li>
+<li>GDPR and CCPA compliance</li>
+<li>Regular security audits and penetration testing</li>
+</ul>
+</li>
+</ul>
+
+</body>
+</html>
